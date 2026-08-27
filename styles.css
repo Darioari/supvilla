@@ -1157,7 +1157,7 @@ svg {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 390px;
+  min-height: 310px;
 }
 
 .deal-day-card::before {
@@ -1292,6 +1292,54 @@ svg {
 }
 
 .deal-day-card > .btn:focus-visible {
+  outline: 3px solid var(--color-accent-light);
+  outline-offset: 3px;
+}
+
+.deal-offer-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  min-height: 52px;
+  margin-top: 28px;
+  padding: 13px 16px 13px 18px;
+  border: 1px solid var(--deal-accent);
+  border-radius: var(--radius-md);
+  background: var(--deal-accent-soft);
+  color: var(--deal-accent);
+  font-size: 0.86rem;
+  font-weight: 900;
+  line-height: 1.2;
+  transition: transform 0.25s var(--ease-spring), background-color 0.2s ease, color 0.2s ease, box-shadow 0.25s ease;
+}
+
+.deal-offer-button svg {
+  width: 28px;
+  height: 28px;
+  padding: 5px;
+  border-radius: 50%;
+  background: #ffffff;
+  transition: transform 0.25s var(--ease-spring);
+}
+
+.deal-offer-button:hover,
+.deal-offer-button:focus-visible {
+  background: var(--deal-accent);
+  color: #ffffff;
+  box-shadow: var(--shadow-md);
+  outline: none;
+  transform: translateY(-2px);
+}
+
+.deal-offer-button:hover svg,
+.deal-offer-button:focus-visible svg {
+  color: var(--deal-accent);
+  transform: translateX(3px);
+}
+
+.deal-offer-button:focus-visible {
   outline: 3px solid var(--color-accent-light);
   outline-offset: 3px;
 }
