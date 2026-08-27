@@ -1142,6 +1142,69 @@ svg {
 /* ==========================================
    CALENDÁRIO SEMANAL DE ECONOMIA
    ========================================== */
+.featured-sectors-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin-top: 36px;
+}
+
+.featured-sector-card {
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.35s var(--ease-spring), box-shadow 0.35s ease, border-color 0.25s ease;
+}
+
+.featured-sector-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--color-primary-border);
+  box-shadow: var(--shadow-lg);
+}
+
+.featured-sector-card > img {
+  display: block;
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  transition: transform 0.55s var(--ease-out-expo);
+}
+
+.featured-sector-card:hover > img {
+  transform: scale(1.045);
+}
+
+.featured-sector-content {
+  padding: 24px 20px 20px;
+}
+
+.featured-sector-kicker {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--color-primary);
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.featured-sector-content h3 {
+  margin: 0 0 8px;
+  color: var(--color-text);
+  font-family: var(--font-heading);
+  font-size: 1.24rem;
+  line-height: 1.2;
+}
+
+.featured-sector-content p {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.94rem;
+  line-height: 1.5;
+}
+
 .deals-week-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -1834,12 +1897,30 @@ svg {
   .deals-week-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .featured-sectors-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
   .form-row {
     grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 640px) {
+  .featured-sectors-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 28px;
+  }
+
+  .featured-sector-card > img {
+    height: 210px;
+  }
+
+  .featured-sector-content {
+    padding: 20px;
+  }
+
   .deals-week-grid {
     grid-template-columns: 1fr;
     gap: 16px;
