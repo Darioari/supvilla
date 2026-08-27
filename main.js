@@ -1,42 +1,210 @@
+document.documentElement.classList.add('js-motion');
+
 /* ==========================================
    SUPERMERCADO VILLA - VANILLA JAVASCRIPT
    ========================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Scroll Header Effect
-  const header = document.querySelector('.header');
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 20) {
-      header.classList.add('scrolled');
-    } else {
-      header.classList.remove('scrolled');
-    }
-  });
-
-  // 2. Mobile Menu Toggle
-  const mobileToggle = document.getElementById('mobileToggle');
-  const navMenu = document.getElementById('navMenu');
-
-  if (mobileToggle && navMenu) {
-    mobileToggle.addEventListener('click', (e) => {
-      e.stopPropagation();
-      navMenu.classList.toggle('active');
+  // 0. Hero Load Animation — trigger staggered entrance
+  const heroSections = document.querySelectorAll('.hero-section, .hero-slider-section, .page-hero');
+  if (heroSections.length > 0) {
+    requestAnimationFrame(() => {
+      heroSections.forEach(heroSection => heroSection.setAttribute('data-loaded', 'true'));
     });
+  }
 
-    // Close menu when clicking links
-    document.querySelectorAll('.nav-link').forEach(link => {
+  // 0.1 Hero Banner Slider (Carrossel Automático com Touch Swipe)
+  const sliderTrack = document.getElementById('sliderTrack');
+  const slides = document.querySelectorAll('.slide');
+  const prevBtn = document.getElementById('sliderPrev');
+  const nextBtn = document.getElementById('sliderNext');
+  const dotsContainer = document.getElementById('sliderDots');
+
+  if (sliderTrack && slides.length > 0) {
+    let currentSlide = 0;
+    const totalSlides = slides.length;
+    let autoSlideTimer = null;
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    // Criar dots indicadores se o container existir
+    if (dotsContainer) {
+      dotsContainer.innerHTML = '';
+      slides.forEach((_, idx) => {
+        const dot = document.createElement('button');
+        dot.className = `slider-dot ${idx === 0 ? 'active' : ''}`;
+        dot.setAttribute('aria-label', `Slide ${idx + 1}`);
+        dot.addEventListener('click', () => goToSlide(idx));
+        dotsContainer.appendChild(dot);
+      });
+    }
+
+    const updateDots = () => {
+      if (!dotsContainer) return;
+      const dots = dotsContainer.querySelectorAll('.slider-dot');
+      dots.forEach((dot, idx) => {
+        dot.classList.toggle('active', idx === currentSlide);
+      });
+    };
+
+    const goToSlide = (index) => {
+      currentSlide = (index + totalSlides) % totalSlides;
+      sliderTrack.style.transform = `translateX(-${currentSlide * 100}%)`;
+      updateDots();
+    };
+
+    const nextSlide = () => goToSlide(currentSlide + 1);
+    const prevSlide = () => goToSlide(currentSlide - 1);
+
+    if (nextBtn) nextBtn.addEventListener('click', () => { nextSlide(); resetTimer(); });
+    if (prevBtn) prevBtn.addEventListener('click', () => { prevSlide(); resetTimer(); });
+
+    const startTimer = () => {
+      stopTimer();
+      autoSlideTimer = setInterval(nextSlide, 5000);
+    };
+
+    const stopTimer = () => {
+      if (autoSlideTimer) clearInterval(autoSlideTimer);
+    };
+
+    const resetTimer = () => {
+      stopTimer();
+      startTimer();
+    };
+
+    // Pausar no hover
+    const sliderContainer = document.querySelector('.hero-slider');
+    if (sliderContainer) {
+      sliderContainer.addEventListener('mouseenter', stopTimer);
+      sliderContainer.addEventListener('mouseleave', startTimer);
+
+      // Suporte a Touch Swipe
+      sliderContainer.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+      }, { passive: true });
+
+      sliderContainer.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        const swipeDiff = touchEndX - touchStartX;
+        if (Math.abs(swipeDiff) > 40) {
+          if (swipeDiff < 0) nextSlide();
+          else prevSlide();
+          resetTimer();
+        }
+      }, { passive: true });
+    }
+
+    startTimer();
+  }
+
+  // 0.3 Scroll Header Effect + indicador de progresso da página
+  const header = document.querySelector('.header');
+  const progress = document.createElement('div');
+  progress.className = 'scroll-progress';
+  progress.setAttribute('aria-hidden', 'true');
+  document.body.prepend(progress);
+
+  let scrollFrame;
+  const updateScrollState = () => {
+    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+    const scrollRatio = maxScroll > 0 ? Math.min(window.scrollY / maxScroll, 1) : 0;
+
+    if (header) header.classList.toggle('scrolled', window.scrollY > 20);
+    progress.style.transform = `scaleX(${scrollRatio})`;
+    scrollFrame = undefined;
+  };
+
+  window.addEventListener('scroll', () => {
+    if (!scrollFrame) scrollFrame = requestAnimationFrame(updateScrollState);
+  }, { passive: true });
+  window.addEventListener('resize', updateScrollState, { passive: true });
+  updateScrollState();
+
+  // 0.4 Menu compacto: fecha ao navegar, clicar fora ou pressionar Esc.
+  const navMenu = document.getElementById('navMenu');
+  const villaMenu = document.querySelector('.villa-menu-nav');
+
+  if (navMenu && villaMenu) {
+    const syncMenuState = () => {
+      navMenu.setAttribute('aria-expanded', String(navMenu.checked));
+    };
+
+    navMenu.addEventListener('change', syncMenuState);
+    syncMenuState();
+
+    villaMenu.querySelectorAll('.menu-list').forEach(link => {
       link.addEventListener('click', () => {
-        navMenu.classList.remove('active');
+        navMenu.checked = false;
+        syncMenuState();
       });
     });
 
-    // Close menu when clicking outside
-    document.addEventListener('click', (e) => {
-      if (!navMenu.contains(e.target) && !mobileToggle.contains(e.target) && navMenu.classList.contains('active')) {
-        navMenu.classList.remove('active');
+    document.addEventListener('click', (event) => {
+      if (navMenu.checked && !villaMenu.contains(event.target)) {
+        navMenu.checked = false;
+        syncMenuState();
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && navMenu.checked) {
+        navMenu.checked = false;
+        syncMenuState();
+        navMenu.focus();
       }
     });
   }
+
+  // 0.5 Formulário Trabalhe Conosco (Feedback)
+  const careerForm = document.getElementById('careerForm');
+  if (careerForm) {
+    careerForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const feedback = document.getElementById('careerSuccess');
+      if (feedback) {
+        careerForm.style.display = 'none';
+        feedback.style.display = 'block';
+      }
+    });
+  }
+
+  // 0.7 Tablóide Lightbox Zoom Modal
+  const tabloideFrame = document.getElementById('tabloideFrame');
+  const tabloideLightbox = document.getElementById('tabloideLightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  const lightboxClose = document.getElementById('lightboxClose');
+  const openFullscreenBtn = document.getElementById('openFullscreenBtn');
+
+  const openLightbox = () => {
+    if (tabloideLightbox && lightboxImg) {
+      const sourceImg = document.getElementById('tabloideImg');
+      if (sourceImg) lightboxImg.src = sourceImg.src;
+      tabloideLightbox.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+  };
+
+  const closeLightbox = () => {
+    if (tabloideLightbox) {
+      tabloideLightbox.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  };
+
+  if (tabloideFrame) tabloideFrame.addEventListener('click', openLightbox);
+  if (openFullscreenBtn) openFullscreenBtn.addEventListener('click', openLightbox);
+  if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
+  if (tabloideLightbox) {
+    tabloideLightbox.addEventListener('click', (e) => {
+      if (e.target === tabloideLightbox) closeLightbox();
+    });
+  }
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && tabloideLightbox && tabloideLightbox.classList.contains('open')) {
+      closeLightbox();
+    }
+  });
 
   // 3. Timeline Tabs Data & Switching
   const timelineData = [
@@ -155,6 +323,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const data = sectorData[index];
       if (data && sectorImg) {
+        const sectorImageWrap = sectorImg.closest('.sector-img-wrap');
+        sectorImageWrap?.classList.add('is-changing');
         sectorImg.src = data.image;
         sectorImg.alt = data.title;
         sectorImgBadge.textContent = data.badge;
@@ -167,6 +337,10 @@ document.addEventListener('DOMContentLoaded', () => {
             .map(b => `<li class="sector-benefit-item">${b}</li>`)
             .join('');
         }
+
+        sectorImg.addEventListener('load', () => {
+          sectorImageWrap?.classList.remove('is-changing');
+        }, { once: true });
       }
     });
   });
@@ -237,6 +411,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // 7. Intersection Observer para Animações de Scroll Reveal (Estilo Medico)
+  document.querySelector('.timeline-card')?.classList.add('reveal--from-left');
+  document.querySelector('.sector-grid')?.classList.add('reveal', 'reveal--from-right');
+  document.querySelector('.clube-grid')?.classList.add('reveal--from-left');
+  document.querySelector('.stores-grid')?.classList.add('reveal', 'reveal--from-right');
   const revealElements = document.querySelectorAll('.reveal');
   if (revealElements.length > 0) {
     const revealObserver = new IntersectionObserver((entries, observer) => {
