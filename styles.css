@@ -1057,6 +1057,82 @@ svg {
   margin-top: 2px;
 }
 
+/* Chamada direta para o aplicativo oficial. */
+.app-promo-section {
+  padding: 18px 0 10px;
+}
+
+.app-promo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  padding: 28px 32px;
+  border: 1px solid var(--color-primary-border);
+  border-radius: var(--radius-xl);
+  background: linear-gradient(105deg, var(--color-primary-light), #ffffff 72%);
+}
+
+.app-promo-kicker {
+  display: inline-block;
+  margin-bottom: 6px;
+  color: var(--color-primary);
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+}
+
+.app-promo h2 {
+  margin-bottom: 6px;
+  font-size: clamp(1.35rem, 2.4vw, 1.8rem);
+  letter-spacing: -0.025em;
+}
+
+.app-promo p {
+  max-width: 620px;
+  color: var(--color-text-muted);
+  font-size: 0.92rem;
+}
+
+.app-promo-button {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 9px 18px;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: #ffffff;
+  box-shadow: 0 10px 20px rgba(21, 128, 61, 0.2);
+  font-weight: 900;
+  line-height: 1;
+  transition: transform 0.25s var(--ease-spring), background-color 0.2s ease, box-shadow 0.25s ease;
+}
+
+.app-promo-button span {
+  display: grid;
+  gap: 3px;
+}
+
+.app-promo-button small {
+  font-size: 0.62rem;
+  font-weight: 700;
+}
+
+.app-promo-button:hover,
+.app-promo-button:focus-visible {
+  background: var(--color-primary-hover);
+  box-shadow: 0 13px 24px rgba(21, 128, 61, 0.27);
+  transform: translateY(-2px);
+  outline: none;
+}
+
+.app-promo-button:focus-visible {
+  outline: 3px solid var(--color-accent-light);
+  outline-offset: 3px;
+}
+
 /* ==========================================
    CALENDÁRIO SEMANAL DE ECONOMIA
    ========================================== */
@@ -3315,5 +3391,21 @@ svg {
 
   .retail-qr-code-box {
     margin-bottom: 4px;
+  }
+
+  .app-promo-section {
+    padding-top: 12px;
+  }
+
+  .app-promo {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 20px;
+    padding: 24px 20px;
+  }
+
+  .app-promo-button {
+    width: 100%;
+    justify-content: center;
   }
 }
