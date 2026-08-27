@@ -3491,11 +3491,14 @@ svg {
   }
 
   .hero-slider {
-    min-height: 620px;
-    height: auto;
+    height: 620px;
+    min-height: 0;
   }
 
+  .slider-track,
   .slide {
+    height: 100%;
+    min-height: 100%;
     flex-basis: 100%;
   }
 
