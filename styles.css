@@ -1110,6 +1110,12 @@ svg {
   transition: transform 0.25s var(--ease-spring), background-color 0.2s ease, box-shadow 0.25s ease;
 }
 
+.app-promo-button .kOqhQd {
+    width: 28px;
+    height: 28px;
+    flex: 0 0 28px;
+}
+
 .app-promo-button span {
   display: grid;
   gap: 3px;
