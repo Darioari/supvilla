@@ -249,26 +249,30 @@ svg {
 .logo {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   min-width: 0;
 }
 
 .logo-box {
   background: #ffffff;
-  padding: 4px 6px;
+  padding: 5px 8px;
   border-radius: var(--radius-md);
   border: 1px solid var(--color-border);
-  box-shadow: var(--shadow-sm);
-  transition: transform 0.35s var(--ease-spring);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: transform 0.35s var(--ease-spring), box-shadow 0.35s ease;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .logo:hover .logo-box {
   transform: scale(1.05) rotate(-1deg);
+  box-shadow: 0 4px 14px rgba(2, 87, 49, 0.15);
 }
 
 .logo-img {
-  height: 40px;
+  height: 52px;
   width: auto;
   object-fit: contain;
 }
@@ -282,7 +286,7 @@ svg {
 .logo-title {
   font-family: var(--font-heading);
   font-weight: 900;
-  font-size: 1.05rem;
+  font-size: 1.2rem;
   color: var(--color-text);
   letter-spacing: -0.02em;
   white-space: nowrap;
@@ -290,11 +294,11 @@ svg {
 }
 
 .logo-subtitle {
-  font-size: 0.62rem;
+  font-size: 0.68rem;
   font-weight: 800;
   color: var(--color-primary);
   text-transform: uppercase;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
 }
 
 .villa-menu-nav {
@@ -567,13 +571,23 @@ svg {
   background-position: center;
 }
 
-/* Slide 1: Banner Estilo Big Compra (Escuro + Laranja/Verde + QR Code + WhatsApp) */
+/* Slide 1: Grande Banner de Varejo com Fundo de Supermercado e Mulher com Cartão */
 .slide-retail-campaign {
-  background: radial-gradient(circle at 10% 50%, #17201b 0%, #0c120e 100%);
+  background-image: url('images/hero-supermarket-bg.jpg');
+  background-size: cover;
+  background-position: center center;
   position: relative;
   overflow: hidden;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
+  height: 100%;
+}
+
+.retail-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(6, 28, 16, 0.95) 0%, rgba(6, 28, 16, 0.85) 45%, rgba(6, 28, 16, 0.45) 75%, rgba(6, 28, 16, 0.15) 100%);
+  z-index: 2;
 }
 
 .retail-bg-watermark {
@@ -588,19 +602,7 @@ svg {
   text-transform: uppercase;
   pointer-events: none;
   line-height: 0.9;
-  z-index: 1;
-}
-
-.retail-right-orange-shape {
-  position: absolute;
-  right: -5%;
-  top: -10%;
-  bottom: -10%;
-  width: 48%;
-  background: linear-gradient(135deg, #ea580c 0%, #c2410c 50%, #9a3412 100%);
-  clip-path: polygon(25% 0%, 100% 0%, 100% 100%, 0% 100%);
-  z-index: 2;
-  box-shadow: -15px 0 35px rgba(0, 0, 0, 0.4);
+  z-index: 3;
 }
 
 .retail-container {
@@ -609,23 +611,59 @@ svg {
   width: 100%;
   height: 100%;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  align-items: flex-end;
 }
 
 .retail-banner-grid {
   display: grid;
-  grid-template-columns: 1.1fr 1fr 1fr;
-  align-items: center;
-  gap: 20px;
+  grid-template-columns: 1.15fr 0.85fr;
+  align-items: flex-end;
+  gap: 30px;
   width: 100%;
   height: 100%;
+  position: relative;
+  z-index: 5;
 }
 
-/* Coluna Esquerda: Textos Grandes e WhatsApp */
 .retail-col-left {
   color: #ffffff;
-  padding-right: 10px;
+  padding: 40px 0 50px 0;
+  align-self: center;
+}
+
+.retail-col-visual {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  height: 100%;
+  position: relative;
+}
+
+.retail-shopper-wrap {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+}
+
+.retail-shopper-img {
+  max-height: 610px;
+  height: auto;
+  width: auto;
+  max-width: none;
+  object-fit: contain;
+  display: block;
+  filter: none;
+  box-shadow: none;
+  transition: transform 0.5s var(--ease-spring);
+  margin-bottom: 0;
+  align-self: flex-end;
+}
+
+.retail-shopper-wrap:hover .retail-shopper-img {
+  transform: scale(1.02);
 }
 
 .retail-tag-eyebrow {
@@ -663,6 +701,8 @@ svg {
   font-weight: 800;
   color: #ffffff;
   display: block;
+  text-transform: none;
+  letter-spacing: -0.02em;
   margin-top: 4px;
 }
 
@@ -671,19 +711,22 @@ svg {
   align-items: center;
   gap: 12px;
   background: #ffffff;
-  color: #ea580c;
-  padding: 10px 24px 10px 14px;
+  color: #111827;
+  padding: 8px 18px 8px 10px;
   border-radius: 9999px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
-  text-decoration: none;
   font-weight: 900;
-  font-size: clamp(1.1rem, 2vw, 1.45rem);
-  transition: transform 0.3s var(--ease-spring), box-shadow 0.3s ease;
+  font-size: clamp(1rem, 1.4vw, 1.25rem);
+  letter-spacing: -0.02em;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+  transition: all 0.3s var(--ease-spring);
+  text-decoration: none;
 }
 
 .retail-whatsapp-pill:hover {
-  transform: translateY(-3px) scale(1.03);
-  box-shadow: 0 15px 30px rgba(234, 88, 12, 0.3);
+  background: #22c55e;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(34, 197, 94, 0.4);
 }
 
 .whatsapp-icon-circle {
@@ -696,11 +739,21 @@ svg {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.retail-whatsapp-pill:hover .whatsapp-icon-circle {
+  background: #ffffff;
+  color: #22c55e;
+  transform: scale(1.08);
 }
 
 .retail-disclaimer {
-  font-size: 0.65rem;
-  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
   margin-top: 14px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -746,97 +799,218 @@ svg {
   100% { transform: translateY(-8px); }
 }
 
-.retail-shopper-img {
-  max-height: 100%;
-  width: auto;
-  object-fit: cover;
-  border-radius: var(--radius-xl);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
-}
-
-/* Coluna Direita: Card Flutuante com QR Code e CTA */
-.retail-col-right {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
+/* Slide 2: Banner do Aplicativo Supermercado Villa com Fundo de Checkout Discreto */
+.slide-app-campaign {
+  background-image: linear-gradient(135deg, rgba(2, 44, 25, 0.93) 0%, rgba(6, 78, 59, 0.86) 55%, rgba(1, 22, 13, 0.95) 100%), url('images/checkout-bg.jpg');
+  background-size: cover;
+  background-position: center center;
   position: relative;
-  z-index: 6;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  height: 100%;
 }
 
-.retail-qr-card {
-  background: #ffffff;
-  border-radius: 28px;
-  padding: 24px 22px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-  text-align: center;
-  max-width: 270px;
+.slide-app-campaign .container {
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+}
+
+.app-banner-glow {
+  position: absolute;
+  right: 8%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 540px;
+  height: 540px;
+  background: radial-gradient(circle, rgba(34, 197, 94, 0.25) 0%, rgba(34, 197, 94, 0) 70%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.app-banner-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  align-items: flex-end;
+  gap: 32px;
   width: 100%;
-  border: 1px solid rgba(255, 255, 255, 0.8);
+  height: 100%;
   position: relative;
+  z-index: 5;
+  padding: 0;
 }
 
-.retail-qr-badge-top {
-  font-size: 0.75rem;
-  font-weight: 900;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #ea580c;
-  margin-bottom: 2px;
+.app-banner-content {
+  color: #ffffff;
+  padding: 48px 0 56px 0;
+  align-self: center;
 }
 
-.retail-qr-title {
-  font-family: var(--font-heading);
-  font-size: 1.4rem;
-  font-weight: 900;
-  color: var(--color-text);
-  line-height: 1.1;
-  margin-bottom: 12px;
-}
-
-.retail-qr-title span {
-  color: #ea580c;
-}
-
-.retail-qr-code-box {
-  background: #f8fafc;
-  border: 1.5px solid #e2e8f0;
-  border-radius: var(--radius-md);
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
+.app-banner-tag {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
+  gap: 8px;
+  background: rgba(34, 197, 94, 0.2);
+  border: 1px solid rgba(34, 197, 94, 0.5);
+  color: #86efac;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.app-banner-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.8rem, 3.2vw, 2.75rem);
+  font-weight: 900;
+  line-height: 1.15;
+  color: #ffffff;
   margin-bottom: 14px;
 }
 
-.retail-qr-img {
-  width: 130px;
-  height: 130px;
-  object-fit: contain;
+.app-banner-title span {
+  color: #4ade80;
+  background: linear-gradient(135deg, #4ade80 0%, #fef08a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-.retail-qr-hint {
-  font-size: 0.72rem;
-  font-weight: 800;
-  color: var(--color-text-muted);
-  margin-top: 6px;
+.app-banner-desc {
+  font-size: clamp(0.92rem, 1.1vw, 1.05rem);
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.6;
+  max-width: 520px;
+  margin-bottom: 24px;
 }
 
-.retail-qr-btn {
-  width: 100%;
-  padding: 12px;
-  font-size: 0.85rem;
-  font-weight: 900;
-  background: #ea580c;
+.app-banner-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.btn-app-googleplay {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: #111827;
   color: #ffffff;
+  padding: 10px 20px;
   border-radius: var(--radius-md);
-  box-shadow: 0 4px 15px rgba(234, 88, 12, 0.35);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  text-decoration: none;
+  font-weight: 700;
   transition: all 0.3s var(--ease-spring);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
 }
 
-.retail-qr-btn:hover {
-  background: #c2410c;
+.btn-app-googleplay:hover {
+  background: #000000;
+  border-color: #22c55e;
   transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(34, 197, 94, 0.3);
+  color: #ffffff;
+}
+
+.btn-app-googleplay svg {
+  flex-shrink: 0;
+}
+
+.btn-app-googleplay small {
+  display: block;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.05em;
+  line-height: 1;
+}
+
+.btn-app-googleplay span {
+  font-size: 0.95rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.app-banner-visual {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  position: relative;
+  height: 100%;
+}
+
+.app-mockup-wrap {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.app-mockup-img {
+  max-height: 580px;
+  height: auto;
+  width: auto;
+  max-width: 150%;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.45));
+  transition: transform 0.5s var(--ease-spring);
+  margin-bottom: 0;
+  align-self: flex-end;
+}
+
+.app-mockup-wrap:hover .app-mockup-img {
+  transform: scale(1.02);
+}
+
+.app-float-badge {
+  position: absolute;
+  bottom: 22%;
+  left: -20px;
+  background: rgba(17, 24, 39, 0.92);
+  backdrop-filter: blur(10px);
+  border: 1.5px solid #22c55e;
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: float-badge 3.5s ease-in-out infinite alternate;
+  z-index: 10;
+}
+
+@media (max-width: 900px) {
+  .app-banner-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 20px;
+    padding: 20px 0 0 0;
+  }
+  .app-banner-content {
+    padding: 20px 0 0 0;
+  }
+  .app-banner-actions {
+    justify-content: center;
+  }
+  .app-mockup-img {
+    max-height: 340px;
+  }
+  .app-banner-desc {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .app-float-badge {
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 20px;
+  }
 }
 
 .slide-overlay {
@@ -1753,33 +1927,26 @@ svg {
   transform: scaleX(1);
 }
 
-/* Primeira dobra da home: copy, imagem e prova entram como três blocos. */
+/* Primeira dobra da home: copy e visual entram harmoniosamente */
 .js-motion .hero-slider-section .slide-retail-campaign .retail-col-left,
-.js-motion .hero-slider-section .slide-retail-campaign .retail-col-center,
-.js-motion .hero-slider-section .slide-retail-campaign .retail-col-right {
+.js-motion .hero-slider-section .slide-retail-campaign .retail-col-visual {
   opacity: 0;
   transition: opacity 620ms var(--ease-out-expo), transform 620ms var(--ease-out-expo);
 }
 
 .js-motion .hero-slider-section .slide-retail-campaign .retail-col-left {
-  transform: translate3d(-26px, 18px, 0);
+  transform: translate3d(-24px, 16px, 0);
 }
 
-.js-motion .hero-slider-section .slide-retail-campaign .retail-col-center {
-  transform: translate3d(0, 18px, 0) scale(0.985);
-  transition-delay: 90ms;
-}
-
-.js-motion .hero-slider-section .slide-retail-campaign .retail-col-right {
-  transform: translate3d(26px, 18px, 0);
-  transition-delay: 180ms;
+.js-motion .hero-slider-section .slide-retail-campaign .retail-col-visual {
+  transform: translate3d(24px, 16px, 0);
+  transition-delay: 120ms;
 }
 
 .js-motion .hero-slider-section[data-loaded='true'] .slide-retail-campaign .retail-col-left,
-.js-motion .hero-slider-section[data-loaded='true'] .slide-retail-campaign .retail-col-center,
-.js-motion .hero-slider-section[data-loaded='true'] .slide-retail-campaign .retail-col-right {
+.js-motion .hero-slider-section[data-loaded='true'] .slide-retail-campaign .retail-col-visual {
   opacity: 1;
-  transform: translate3d(0, 0, 0) scale(1);
+  transform: translate3d(0, 0, 0);
 }
 
 .breadcrumbs {
@@ -3081,15 +3248,15 @@ svg {
   }
 
   .logo-img {
-    height: 32px;
+    height: 42px;
   }
 
   .logo-title {
-    font-size: 0.92rem;
+    font-size: 1.05rem;
   }
 
   .logo-subtitle {
-    font-size: 0.55rem;
+    font-size: 0.6rem;
   }
 
   .stats-grid {
@@ -3462,7 +3629,7 @@ svg {
   }
 
   .logo-title {
-    font-size: 0.78rem;
+    font-size: 0.88rem;
   }
 
   .logo-subtitle {

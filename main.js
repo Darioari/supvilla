@@ -268,11 +268,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // 4. Quality Sector Tabs Data & Switching
   const sectorData = [
     {
-      title: 'Hortifrúti Fresco',
+      title: 'Hortifruti Fresco',
       tagline: 'Frescor e Sabor Selecionados Diariamente',
       image: 'images/hortifruti.jpg',
       badge: 'Direto do Produtor',
-      desc: 'Por isso, selecionamos diariamente o melhor em frutas, verduras e legumes no nosso Hortifrúti, garantindo o frescor e o sabor que a sua família merece.',
+      desc: 'Por isso, selecionamos diariamente o melhor em frutas, verduras e legumes no nosso Hortifruti, garantindo o frescor e o sabor que a sua família merece.',
       benefits: [
         'Frutas e verduras selecionadas manualmente todo dia',
         'Reposição contínua para garantir o máximo frescor',
