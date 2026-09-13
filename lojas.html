@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <!-- SEO Primary Meta Tags -->
-  <title>Nossas Lojas e Horários | Supermercado Villa Jardinópolis - SP</title>
-  <meta name="title" content="Nossas Lojas e Horários | Supermercado Villa Jardinópolis - SP">
-  <meta name="description" content="Encontre as unidades do Supermercado Villa em Jardinópolis: Loja 1 (Área Industrial) e Loja 2 (Jardim Aroeira). Horários de atendimento, rotas e serviços.">
-  <meta name="keywords" content="Lojas Supermercado Villa, Supermercado Jardinópolis, Horario Supermercado Villa, Loja 1 Area Industrial, Loja 2 Jardim Aroeira">
+  <title>Nossas Lojas | Supermercado Villa Jardinópolis - SP</title>
+  <meta name="title" content="Nossas Lojas | Supermercado Villa Jardinópolis - SP">
+  <meta name="description" content="Encontre as unidades do Supermercado Villa em Jardinópolis: Loja 1 (Vila Reis) e Loja 2 (Bairro Aroeira). Rotas, canais de atendimento e serviços.">
+  <meta name="keywords" content="Lojas Supermercado Villa, Supermercado Jardinópolis, Loja 1 Vila Reis, Loja 2 Bairro Aroeira">
   <meta name="author" content="Supermercado Villa">
   <meta name="robots" content="index, follow">
 
@@ -92,10 +92,10 @@
             </p>
 
             <div style="background: var(--color-bg-muted); padding: 16px 20px; border-radius: var(--radius-md); margin-bottom: 24px;">
-              <h4 style="font-size: 0.9rem; font-weight: 900; margin-bottom: 8px; color: var(--color-text);">Canais e Horários de Atendimento:</h4>
-              <p style="font-size: 0.85rem; margin: 4px 0; color: var(--color-text);">• Telefone Fixo: <strong>(16) 3663-8018</strong></p>
-              <p style="font-size: 0.85rem; margin: 4px 0; color: var(--color-text);">• Celular / WhatsApp: <strong>(16) 99140-2936</strong></p>
-              <p style="font-size: 0.85rem; margin: 4px 0; color: var(--color-text-muted);">• Seg a Sáb: <strong>07:00 às 20:00</strong> | Dom e Feriados: <strong>07:00 às 13:00</strong></p>
+              <h4 style="font-size: 0.9rem; font-weight: 900; margin-bottom: 8px; color: var(--color-text);">Canais de Atendimento:</h4>
+              <p style="font-size: 0.85rem; margin: 4px 0; color: var(--color-text);">• Telefone Fixo: <strong id="loja1Telefone">(16) 3663-8018</strong></p>
+              <p style="font-size: 0.85rem; margin: 4px 0; color: var(--color-text);">• Celular / WhatsApp: <strong id="loja1Whatsapp">(16) 99140-2936</strong></p>
+              <p id="loja1Horarios" style="display: none; font-size: 0.85rem; margin: 4px 0; color: var(--color-text-muted);"></p>
             </div>
 
             <div style="display: flex; gap: 12px; flex-wrap: wrap;">
@@ -131,9 +131,9 @@
             </p>
 
             <div style="background: var(--color-bg-muted); padding: 16px 20px; border-radius: var(--radius-md); margin-bottom: 24px;">
-              <h4 style="font-size: 0.9rem; font-weight: 900; margin-bottom: 8px; color: var(--color-text);">Canais e Horários de Atendimento:</h4>
-              <p style="font-size: 0.85rem; margin: 4px 0; color: var(--color-text);">• Celular / WhatsApp: <strong>(16) 99317-4089</strong></p>
-              <p style="font-size: 0.85rem; margin: 4px 0; color: var(--color-text-muted);">• Seg a Sáb: <strong>07:00 às 20:00</strong> | Dom e Feriados: <strong>07:00 às 13:00</strong></p>
+              <h4 style="font-size: 0.9rem; font-weight: 900; margin-bottom: 8px; color: var(--color-text);">Canais de Atendimento:</h4>
+              <p style="font-size: 0.85rem; margin: 4px 0; color: var(--color-text);">• Celular / WhatsApp: <strong id="loja2Whatsapp">(16) 99317-4089</strong></p>
+              <p id="loja2Horarios" style="display: none; font-size: 0.85rem; margin: 4px 0; color: var(--color-text-muted);"></p>
             </div>
 
             <div style="display: flex; gap: 12px; flex-wrap: wrap;">
@@ -184,7 +184,7 @@
             <li><a href="index.html">Página Inicial</a></li>
             <li><a href="ofertas.html">Jornal de Ofertas da Semana</a></li>
             <li><a href="clube.html">Clube Villa (Descontos)</a></li>
-            <li><a href="lojas.html">Nossas Lojas e Horários</a></li>
+            <li><a href="lojas.html">Nossas Lojas</a></li>
             <li><a href="sobre.html">Nossa História (18 Anos)</a></li>
             <li><a href="contato.html">Fale Conosco / SAC</a></li>
           </ul>

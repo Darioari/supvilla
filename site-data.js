@@ -23,8 +23,8 @@ window.DEFAULT_VILLA_DATA = {
     telefone: "(16) 3663-8018",
     whatsapp: "(16) 99140-2936",
     whatsappRaw: "5516991402936",
-    horarioSemana: "07:00 às 20:00",
-    horarioDomingo: "07:00 às 13:00",
+    horarioSemana: "",
+    horarioDomingo: "",
     mapsUrl: "https://maps.google.com/?q=Rua+Eugenio+Lamonato+386+Jardinopolis+SP",
     wazeUrl: "https://waze.com/ul?q=Rua+Eugenio+Lamonato+386+Jardinopolis+SP"
   },
@@ -35,8 +35,8 @@ window.DEFAULT_VILLA_DATA = {
     telefone: "",
     whatsapp: "(16) 99317-4089",
     whatsappRaw: "5516993174089",
-    horarioSemana: "07:00 às 20:00",
-    horarioDomingo: "07:00 às 13:00",
+    horarioSemana: "",
+    horarioDomingo: "",
     mapsUrl: "https://maps.google.com/?q=Rua+Alcides+Pezeta+461+Jardinopolis+SP",
     wazeUrl: "https://waze.com/ul?q=Rua+Alcides+Pezeta+461+Jardinopolis+SP"
   },

@@ -660,6 +660,52 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       }
     }
+
+    // Atualizar dados das Lojas e Horários Dinâmicos (ocultos se vazios)
+    if (data.loja1) {
+      const telEl = document.getElementById('loja1Telefone');
+      if (telEl && data.loja1.telefone) telEl.textContent = data.loja1.telefone;
+
+      const zapEl = document.getElementById('loja1Whatsapp');
+      if (zapEl && data.loja1.whatsapp) zapEl.textContent = data.loja1.whatsapp;
+
+      const horEl = document.getElementById('loja1Horarios');
+      if (horEl) {
+        const sem = (data.loja1.horarioSemana || '').trim();
+        const dom = (data.loja1.horarioDomingo || '').trim();
+        if (sem || dom) {
+          let text = '';
+          if (sem) text += `• Seg a Sáb: <strong>${sem}</strong>`;
+          if (dom) text += (text ? ' | ' : '• ') + `Dom e Feriados: <strong>${dom}</strong>`;
+          horEl.innerHTML = text;
+          horEl.style.display = 'block';
+        } else {
+          horEl.innerHTML = '';
+          horEl.style.display = 'none';
+        }
+      }
+    }
+
+    if (data.loja2) {
+      const zapEl = document.getElementById('loja2Whatsapp');
+      if (zapEl && data.loja2.whatsapp) zapEl.textContent = data.loja2.whatsapp;
+
+      const horEl = document.getElementById('loja2Horarios');
+      if (horEl) {
+        const sem = (data.loja2.horarioSemana || '').trim();
+        const dom = (data.loja2.horarioDomingo || '').trim();
+        if (sem || dom) {
+          let text = '';
+          if (sem) text += `• Seg a Sáb: <strong>${sem}</strong>`;
+          if (dom) text += (text ? ' | ' : '• ') + `Dom e Feriados: <strong>${dom}</strong>`;
+          horEl.innerHTML = text;
+          horEl.style.display = 'block';
+        } else {
+          horEl.innerHTML = '';
+          horEl.style.display = 'none';
+        }
+      }
+    }
   }
 
   window.applyVillaSiteData = applyVillaSiteData;
