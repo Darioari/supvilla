@@ -3657,3 +3657,210 @@ svg {
     white-space: normal;
   }
 }
+
+/* ===================================================
+   FLIPBOOK / JORNAL DE OFERTAS INTERATIVO MULTI-PÁGINAS
+   =================================================== */
+.flipbook-container {
+  position: relative;
+  width: 100%;
+  max-width: 860px;
+  margin: 0 auto;
+  perspective: 2000px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.flipbook-stage {
+  position: relative;
+  width: 100%;
+  min-height: 520px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: #0f172a;
+  box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.45);
+}
+
+.flipbook-sheet {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transform-style: preserve-3d;
+  transition: transform 0.65s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.4s ease;
+  transform: rotateY(70deg) scale(0.92);
+  transform-origin: left center;
+}
+
+.flipbook-sheet.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: rotateY(0deg) scale(1);
+  z-index: 5;
+}
+
+.flipbook-sheet.flipped {
+  opacity: 0;
+  pointer-events: none;
+  transform: rotateY(-70deg) scale(0.92);
+  transform-origin: right center;
+  z-index: 1;
+}
+
+.flipbook-sheet img {
+  max-width: 100%;
+  max-height: 720px;
+  object-fit: contain;
+  border-radius: 4px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  cursor: zoom-in;
+  user-select: none;
+}
+
+/* Controles e Navegação do Flipbook */
+.flipbook-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  backdrop-filter: blur(8px);
+  transition: all 0.25s var(--ease-spring);
+}
+
+.flipbook-nav-btn:hover {
+  background: #16a34a;
+  border-color: #22c55e;
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 8px 20px rgba(22, 163, 74, 0.4);
+}
+
+.flipbook-nav-btn:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.flipbook-nav-prev {
+  left: 14px;
+}
+
+.flipbook-nav-next {
+  right: 14px;
+}
+
+/* Barra Inferior com Indicador e Miniaturas */
+.flipbook-controls-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 14px 20px;
+  background: #ffffff;
+  border-top: 1px solid var(--color-border);
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.flipbook-page-indicator {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.flipbook-thumbnails {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 0;
+  max-width: 100%;
+}
+
+.flipbook-thumb {
+  width: 46px;
+  height: 60px;
+  border-radius: 4px;
+  border: 2px solid transparent;
+  overflow: hidden;
+  cursor: pointer;
+  flex-shrink: 0;
+  opacity: 0.6;
+  transition: all 0.2s ease;
+}
+
+.flipbook-thumb.active {
+  border-color: #16a34a;
+  opacity: 1;
+  transform: scale(1.08);
+  box-shadow: 0 4px 10px rgba(22, 163, 74, 0.3);
+}
+
+.flipbook-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Lightbox Navegação entre Páginas */
+.lightbox-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 210;
+  backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
+}
+
+.lightbox-nav-btn:hover {
+  background: #16a34a;
+  border-color: #22c55e;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.lightbox-nav-prev { left: 24px; }
+.lightbox-nav-next { right: 24px; }
+
+.lightbox-page-counter {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(15, 23, 42, 0.85);
+  color: #ffffff;
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}

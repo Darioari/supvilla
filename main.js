@@ -170,17 +170,35 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 0.7 Tablóide Lightbox Zoom Modal
+  // 0.7 Flipbook & Tablóide Lightbox Zoom Modal
   const tabloideFrame = document.getElementById('tabloideFrame');
   const tabloideLightbox = document.getElementById('tabloideLightbox');
   const lightboxImg = document.getElementById('lightboxImg');
   const lightboxClose = document.getElementById('lightboxClose');
   const openFullscreenBtn = document.getElementById('openFullscreenBtn');
+  const lightboxPrev = document.getElementById('lightboxPrev');
+  const lightboxNext = document.getElementById('lightboxNext');
+  const lightboxPageCounter = document.getElementById('lightboxPageCounter');
 
-  const openLightbox = () => {
+  let currentFlipPage = 0;
+  let currentPages = ['images/tabloide-oficial.jpg'];
+
+  function updateLightboxView() {
+    if (!lightboxImg) return;
+    lightboxImg.src = currentPages[currentFlipPage] || currentPages[0];
+    if (lightboxPageCounter) {
+      lightboxPageCounter.textContent = `Página ${currentFlipPage + 1} de ${currentPages.length}`;
+    }
+    if (lightboxPrev) lightboxPrev.style.display = currentPages.length > 1 ? 'flex' : 'none';
+    if (lightboxNext) lightboxNext.style.display = currentPages.length > 1 ? 'flex' : 'none';
+  }
+
+  const openLightbox = (pageIndex) => {
+    if (typeof pageIndex === 'number') {
+      currentFlipPage = pageIndex;
+    }
     if (tabloideLightbox && lightboxImg) {
-      const sourceImg = document.getElementById('tabloideImg');
-      if (sourceImg) lightboxImg.src = sourceImg.src;
+      updateLightboxView();
       tabloideLightbox.classList.add('open');
       document.body.style.overflow = 'hidden';
     }
@@ -193,17 +211,44 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  if (tabloideFrame) tabloideFrame.addEventListener('click', openLightbox);
-  if (openFullscreenBtn) openFullscreenBtn.addEventListener('click', openLightbox);
+  if (tabloideFrame) tabloideFrame.addEventListener('click', () => openLightbox(0));
+  if (openFullscreenBtn) openFullscreenBtn.addEventListener('click', () => openLightbox(currentFlipPage));
   if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
+  if (lightboxPrev) {
+    lightboxPrev.addEventListener('click', (e) => {
+      e.stopPropagation();
+      currentFlipPage = (currentFlipPage - 1 + currentPages.length) % currentPages.length;
+      updateLightboxView();
+      if (typeof window.goToFlipPage === 'function') window.goToFlipPage(currentFlipPage);
+    });
+  }
+  if (lightboxNext) {
+    lightboxNext.addEventListener('click', (e) => {
+      e.stopPropagation();
+      currentFlipPage = (currentFlipPage + 1) % currentPages.length;
+      updateLightboxView();
+      if (typeof window.goToFlipPage === 'function') window.goToFlipPage(currentFlipPage);
+    });
+  }
+
   if (tabloideLightbox) {
     tabloideLightbox.addEventListener('click', (e) => {
       if (e.target === tabloideLightbox) closeLightbox();
     });
   }
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && tabloideLightbox && tabloideLightbox.classList.contains('open')) {
-      closeLightbox();
+    if (tabloideLightbox && tabloideLightbox.classList.contains('open')) {
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft' && currentPages.length > 1) {
+        currentFlipPage = (currentFlipPage - 1 + currentPages.length) % currentPages.length;
+        updateLightboxView();
+        if (typeof window.goToFlipPage === 'function') window.goToFlipPage(currentFlipPage);
+      }
+      if (e.key === 'ArrowRight' && currentPages.length > 1) {
+        currentFlipPage = (currentFlipPage + 1) % currentPages.length;
+        updateLightboxView();
+        if (typeof window.goToFlipPage === 'function') window.goToFlipPage(currentFlipPage);
+      }
     }
   });
 
@@ -487,16 +532,106 @@ document.addEventListener('DOMContentLoaded', () => {
     const data = customData || window.VILLA_SITE_DATA || window.DEFAULT_VILLA_DATA;
     if (!data) return;
 
-    // Atualizar imagens e dados do Jornal de Ofertas / Encarte
+    // Atualizar imagens e páginas do Jornal de Ofertas / Encarte
     if (data.jornal) {
-      if (data.jornal.imagem) {
-        const tabloideImgs = document.querySelectorAll('#tabloideImg, .tabloide-frame img, .hero-slider-section [alt*="Encarte"]');
-        tabloideImgs.forEach(img => {
-          img.src = data.jornal.imagem;
+      const pages = (Array.isArray(data.jornal.paginas) && data.jornal.paginas.length > 0)
+        ? data.jornal.paginas
+        : [data.jornal.imagem || 'images/tabloide-oficial.jpg'];
+      
+      currentPages = pages;
+
+      // 1. Atualiza elementos com imagem simples (home, hero, etc.)
+      const mainCoverImg = pages[0];
+      const singleTabloideImgs = document.querySelectorAll('#tabloideFrame img, .hero-slider-section [alt*="Encarte"]');
+      singleTabloideImgs.forEach(img => {
+        img.src = mainCoverImg;
+      });
+
+      // 2. Renderizar Flipbook Interativo se existir container
+      const flipSheetsContainer = document.getElementById('flipbookSheets');
+      const flipThumbsContainer = document.getElementById('flipbookThumbnails');
+      const flipLabel = document.getElementById('flipbookPageLabel');
+      const flipPrev = document.getElementById('flipPrevBtn');
+      const flipNext = document.getElementById('flipNextBtn');
+
+      if (flipSheetsContainer) {
+        flipSheetsContainer.innerHTML = '';
+        if (flipThumbsContainer) flipThumbsContainer.innerHTML = '';
+
+        pages.forEach((pageSrc, idx) => {
+          // Criar folha 3D do Flipbook
+          const sheet = document.createElement('div');
+          sheet.className = `flipbook-sheet ${idx === currentFlipPage ? 'active' : (idx < currentFlipPage ? 'flipped' : '')}`;
+          sheet.setAttribute('data-index', idx);
+          
+          const img = document.createElement('img');
+          img.src = pageSrc;
+          img.alt = `Jornal de Ofertas Villa - Página ${idx + 1}`;
+          img.addEventListener('click', () => openLightbox(idx));
+          sheet.appendChild(img);
+          flipSheetsContainer.appendChild(sheet);
+
+          // Criar Miniatura clicável
+          if (flipThumbsContainer && pages.length > 1) {
+            const thumb = document.createElement('div');
+            thumb.className = `flipbook-thumb ${idx === currentFlipPage ? 'active' : ''}`;
+            thumb.title = `Ir para Página ${idx + 1}`;
+            thumb.innerHTML = `<img src="${pageSrc}" alt="Página ${idx + 1}">`;
+            thumb.addEventListener('click', () => goToFlipPage(idx));
+            flipThumbsContainer.appendChild(thumb);
+          }
         });
-        const lightboxImg = document.getElementById('lightboxImg');
-        if (lightboxImg) lightboxImg.src = data.jornal.imagem;
+
+        function updateFlipView() {
+          const sheets = flipSheetsContainer.querySelectorAll('.flipbook-sheet');
+          sheets.forEach((sheet, idx) => {
+            sheet.classList.remove('active', 'flipped');
+            if (idx === currentFlipPage) {
+              sheet.classList.add('active');
+            } else if (idx < currentFlipPage) {
+              sheet.classList.add('flipped');
+            }
+          });
+
+          if (flipThumbsContainer) {
+            const thumbs = flipThumbsContainer.querySelectorAll('.flipbook-thumb');
+            thumbs.forEach((th, idx) => {
+              th.classList.toggle('active', idx === currentFlipPage);
+            });
+          }
+
+          if (flipLabel) {
+            flipLabel.textContent = `Página ${currentFlipPage + 1} de ${pages.length}`;
+          }
+
+          if (flipPrev) flipPrev.style.display = pages.length > 1 ? 'flex' : 'none';
+          if (flipNext) flipNext.style.display = pages.length > 1 ? 'flex' : 'none';
+        }
+
+        window.goToFlipPage = (index) => {
+          currentFlipPage = Math.max(0, Math.min(index, pages.length - 1));
+          updateFlipView();
+        };
+
+        if (flipPrev) {
+          flipPrev.onclick = (e) => {
+            e.stopPropagation();
+            currentFlipPage = (currentFlipPage - 1 + pages.length) % pages.length;
+            updateFlipView();
+          };
+        }
+
+        if (flipNext) {
+          flipNext.onclick = (e) => {
+            e.stopPropagation();
+            currentFlipPage = (currentFlipPage + 1) % pages.length;
+            updateFlipView();
+          };
+        }
+
+        updateFlipView();
       }
+
       if (data.jornal.statusBadge) {
         const badgeEls = document.querySelectorAll('.tabloide-status span:not(.tabloide-status-dot)');
         badgeEls.forEach(badge => {

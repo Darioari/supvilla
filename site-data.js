@@ -10,6 +10,9 @@ window.DEFAULT_VILLA_DATA = {
     titulo: "Jornal de Ofertas da Semana",
     statusBadge: "OFERTAS VÁLIDAS DA SEMANA • LOJAS 1 E 2",
     imagem: "images/tabloide-oficial.jpg",
+    paginas: [
+      "images/tabloide-oficial.jpg"
+    ],
     validade: "Consulte a validade no jornal impresso ou pelo WhatsApp",
     linkWhatsappTexto: "Olá, gostaria de receber o jornal de ofertas em PDF do Supermercado Villa"
   },
@@ -51,7 +54,11 @@ function getInitialVillaData() {
   try {
     const cached = localStorage.getItem('villa_custom_site_data');
     if (cached) {
-      return Object.assign({}, window.DEFAULT_VILLA_DATA, JSON.parse(cached));
+      const parsed = JSON.parse(cached);
+      if (parsed.jornal && !parsed.jornal.paginas) {
+        parsed.jornal.paginas = [parsed.jornal.imagem || 'images/tabloide-oficial.jpg'];
+      }
+      return Object.assign({}, window.DEFAULT_VILLA_DATA, parsed);
     }
   } catch (e) {
     console.warn('Erro ao ler cache local:', e);
@@ -74,6 +81,14 @@ window.fetchVillaDataFromSupabase = async function() {
       const rows = await res.json();
       if (rows && rows.length > 0 && rows[0].data) {
         const remoteData = rows[0].data;
+        if (remoteData.jornal) {
+          if (!remoteData.jornal.paginas || !Array.isArray(remoteData.jornal.paginas) || remoteData.jornal.paginas.length === 0) {
+            remoteData.jornal.paginas = [remoteData.jornal.imagem || 'images/tabloide-oficial.jpg'];
+          }
+          if (!remoteData.jornal.imagem && remoteData.jornal.paginas.length > 0) {
+            remoteData.jornal.imagem = remoteData.jornal.paginas[0];
+          }
+        }
         window.VILLA_SITE_DATA = Object.assign({}, window.DEFAULT_VILLA_DATA, remoteData);
         localStorage.setItem('villa_custom_site_data', JSON.stringify(window.VILLA_SITE_DATA));
         if (typeof window.applyVillaSiteData === 'function') {

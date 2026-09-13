@@ -265,12 +265,12 @@
       <p>Gerencie facilmente o Jornal de Ofertas da semana, contatos das duas lojas e links sociais.</p>
     </div>
 
-    <!-- SEÇÃO 1: JORNAL DE OFERTAS / ENCARTE -->
+    <!-- SEÇÃO 1: JORNAL DE OFERTAS / ENCARTE (MULTI-PÁGINAS) -->
     <div class="admin-card">
       <div class="admin-card-header">
         <h2 class="admin-card-title">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/></svg>
-          Jornal de Ofertas da Semana (Encarte Digital)
+          Jornal de Ofertas da Semana (Encarte Digital Flipbook)
         </h2>
         <span class="badge-status badge-success" id="badgeOfertas">Vigente no Site</span>
       </div>
@@ -291,27 +291,33 @@
         </div>
       </div>
 
+      <!-- Gerenciador de Múltiplas Páginas do Jornal de Ofertas -->
       <div class="admin-form-group">
-        <label class="admin-label">Imagem do Jornal de Ofertas</label>
-        
-        <!-- Botão de Upload com visual moderno e destacado -->
-        <div style="margin-bottom: 14px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
-          <input type="file" id="encarteFileInput" accept="image/*" style="display: none;">
-          <button type="button" id="btnUploadTrigger" class="btn btn-primary" style="padding: 13px 26px; font-size: 1rem; display: inline-flex; align-items: center; gap: 10px; cursor: pointer; box-shadow: 0 4px 14px rgba(22,163,74,0.35);">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-            <span>Fazer Upload do Jornal de Ofertas</span>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+          <div>
+            <label class="admin-label" style="margin-bottom: 2px;">Páginas do Jornal de Ofertas (Efeito Revista / Flipbook)</label>
+            <p style="font-size: 0.82rem; color: #64748b; margin: 0;">Você pode subir uma ou várias páginas. O site exibirá em formato de revista folheável (Flipbook)!</p>
+          </div>
+          <span id="totalPagesBadge" style="background: #e0f2fe; color: #0284c7; font-size: 0.8rem; font-weight: 800; padding: 4px 10px; border-radius: 999px;">1 Página</span>
+        </div>
+
+        <!-- Botões de Ação de Upload -->
+        <div style="margin-bottom: 16px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+          <input type="file" id="encarteMultiFileInput" accept="image/*" multiple style="display: none;">
+          <button type="button" id="btnUploadMultiple" class="btn btn-primary" style="padding: 12px 24px; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; box-shadow: 0 4px 14px rgba(22,163,74,0.35);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <span>Adicionar Página(s) / Upload</span>
           </button>
-          <span style="font-size: 0.85rem; color: #64748b;">(Formatos recomendados: JPG, PNG ou WEBP)</span>
+          <button type="button" id="btnClearAllPages" class="btn" style="background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; padding: 11px 18px; font-size: 0.88rem; font-weight: 700; cursor: pointer;">
+            Limpar Todas
+          </button>
+          <span style="font-size: 0.82rem; color: #64748b;">(Selecione uma ou várias imagens de uma vez)</span>
         </div>
 
-        <div class="image-preview-area" id="dropArea" title="Clique para trocar imagem ou use o botão acima">
-          <img id="encartePreviewImg" class="image-preview-img" src="images/tabloide-oficial.jpg" alt="Prévia do Jornal de Ofertas">
+        <!-- Grade Visual de Páginas Cadastradas -->
+        <div id="pagesGridContainer" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; margin-bottom: 18px;">
+          <!-- Itens de página gerados dinamicamente via JS -->
         </div>
-      </div>
-
-      <div class="admin-form-group">
-        <label class="admin-label">Ou informe o caminho/URL da imagem:</label>
-        <input type="text" id="jornalImagemUrl" class="admin-input" placeholder="Ex: images/tabloide-oficial.jpg ou URL completa">
       </div>
     </div>
 
@@ -583,16 +589,127 @@
 
     let currentData = window.VILLA_SITE_DATA || window.DEFAULT_VILLA_DATA;
 
+    // Gerenciador de Páginas do Encarte
+    let currentAdminPages = ['images/tabloide-oficial.jpg'];
+
+    const pagesGridContainer = document.getElementById('pagesGridContainer');
+    const totalPagesBadge = document.getElementById('totalPagesBadge');
+    const btnUploadMultiple = document.getElementById('btnUploadMultiple');
+    const encarteMultiFileInput = document.getElementById('encarteMultiFileInput');
+    const btnClearAllPages = document.getElementById('btnClearAllPages');
+
+    function renderAdminPagesGrid() {
+      if (!pagesGridContainer) return;
+      pagesGridContainer.innerHTML = '';
+
+      if (totalPagesBadge) {
+        totalPagesBadge.textContent = currentAdminPages.length === 1 
+          ? '1 Página Cadastrada' 
+          : `${currentAdminPages.length} Páginas Cadastradas`;
+      }
+
+      currentAdminPages.forEach((pageUrl, idx) => {
+        const item = document.createElement('div');
+        item.style.cssText = 'background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 12px; display: flex; flex-direction: column; align-items: center; position: relative; box-shadow: 0 2px 5px rgba(0,0,0,0.03);';
+        
+        item.innerHTML = `
+          <div style="position: absolute; top: 8px; left: 8px; background: #064e3b; color: #ffffff; font-size: 0.75rem; font-weight: 800; padding: 2px 8px; border-radius: 6px;">
+            Pág. ${idx + 1}
+          </div>
+          <div style="width: 100%; height: 210px; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 8px; background: #ffffff; margin-bottom: 10px; border: 1px solid #f1f5f9;">
+            <img src="${pageUrl}" alt="Página ${idx + 1}" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+          </div>
+          <div style="display: flex; gap: 6px; width: 100%;">
+            <button type="button" class="btn btn-move-prev" data-idx="${idx}" style="flex: 1; padding: 6px; font-size: 0.75rem; background: #e2e8f0; color: #334155; border: none; border-radius: 6px; cursor: pointer;" title="Mover para esquerda" ${idx === 0 ? 'disabled' : ''}>←</button>
+            <button type="button" class="btn btn-remove-page" data-idx="${idx}" style="flex: 1; padding: 6px; font-size: 0.75rem; background: #fee2e2; color: #b91c1c; border: none; border-radius: 6px; cursor: pointer; font-weight: 700;" title="Excluir página">Excluir</button>
+            <button type="button" class="btn btn-move-next" data-idx="${idx}" style="flex: 1; padding: 6px; font-size: 0.75rem; background: #e2e8f0; color: #334155; border: none; border-radius: 6px; cursor: pointer;" title="Mover para direita" ${idx === currentAdminPages.length - 1 ? 'disabled' : ''}>→</button>
+          </div>
+        `;
+
+        // Eventos de remoção e reordenação
+        item.querySelector('.btn-remove-page').addEventListener('click', () => {
+          if (currentAdminPages.length <= 1) {
+            alert('O jornal precisa ter pelo menos 1 página.');
+            return;
+          }
+          currentAdminPages.splice(idx, 1);
+          renderAdminPagesGrid();
+        });
+
+        const prevBtn = item.querySelector('.btn-move-prev');
+        if (prevBtn && idx > 0) {
+          prevBtn.addEventListener('click', () => {
+            const temp = currentAdminPages[idx];
+            currentAdminPages[idx] = currentAdminPages[idx - 1];
+            currentAdminPages[idx - 1] = temp;
+            renderAdminPagesGrid();
+          });
+        }
+
+        const nextBtn = item.querySelector('.btn-move-next');
+        if (nextBtn && idx < currentAdminPages.length - 1) {
+          nextBtn.addEventListener('click', () => {
+            const temp = currentAdminPages[idx];
+            currentAdminPages[idx] = currentAdminPages[idx + 1];
+            currentAdminPages[idx + 1] = temp;
+            renderAdminPagesGrid();
+          });
+        }
+
+        pagesGridContainer.appendChild(item);
+      });
+    }
+
+    if (btnUploadMultiple) {
+      btnUploadMultiple.addEventListener('click', () => encarteMultiFileInput.click());
+    }
+
+    if (btnClearAllPages) {
+      btnClearAllPages.addEventListener('click', () => {
+        if (confirm('Deseja limpar todas as páginas e deixar apenas o padrão?')) {
+          currentAdminPages = ['images/tabloide-oficial.jpg'];
+          renderAdminPagesGrid();
+        }
+      });
+    }
+
+    if (encarteMultiFileInput) {
+      encarteMultiFileInput.addEventListener('change', (e) => {
+        const files = Array.from(e.target.files);
+        if (files.length === 0) return;
+
+        let loadedCount = 0;
+        files.forEach(file => {
+          const reader = new FileReader();
+          reader.onload = (evt) => {
+            currentAdminPages.push(evt.target.result);
+            loadedCount++;
+            if (loadedCount === files.length) {
+              renderAdminPagesGrid();
+              showToast(`${files.length} nova(s) página(s) adicionada(s) com sucesso!`, 'success');
+              encarteMultiFileInput.value = '';
+            }
+          };
+          reader.readAsDataURL(file);
+        });
+      });
+    }
+
     function populateForm(data) {
       if (!data) return;
 
       document.getElementById('jornalTitulo').value = data.jornal?.titulo || '';
       document.getElementById('jornalStatusBadge').value = data.jornal?.statusBadge || '';
       document.getElementById('jornalValidade').value = data.jornal?.validade || '';
-      document.getElementById('jornalImagemUrl').value = data.jornal?.imagem || '';
-      if (data.jornal?.imagem) {
-        document.getElementById('encartePreviewImg').src = data.jornal.imagem;
+
+      if (Array.isArray(data.jornal?.paginas) && data.jornal.paginas.length > 0) {
+        currentAdminPages = [...data.jornal.paginas];
+      } else if (data.jornal?.imagem) {
+        currentAdminPages = [data.jornal.imagem];
+      } else {
+        currentAdminPages = ['images/tabloide-oficial.jpg'];
       }
+      renderAdminPagesGrid();
 
       document.getElementById('loja1Nome').value = data.loja1?.nome || '';
       document.getElementById('loja1Subtitulo').value = data.loja1?.subtitulo || '';
@@ -624,11 +741,14 @@
       const rawWp2 = cleanDigits(document.getElementById('loja2Whatsapp').value);
       const rawWpVip = cleanDigits(document.getElementById('geralWhatsappVip').value);
 
+      const mainCover = currentAdminPages.length > 0 ? currentAdminPages[0] : 'images/tabloide-oficial.jpg';
+
       return {
         jornal: {
           titulo: document.getElementById('jornalTitulo').value.trim(),
           statusBadge: document.getElementById('jornalStatusBadge').value.trim(),
-          imagem: document.getElementById('jornalImagemUrl').value.trim() || 'images/tabloide-oficial.jpg',
+          imagem: mainCover,
+          paginas: currentAdminPages,
           validade: document.getElementById('jornalValidade').value.trim(),
           linkWhatsappTexto: 'Olá, gostaria de receber o jornal de ofertas em PDF do Supermercado Villa'
         },
@@ -665,41 +785,6 @@
         }
       };
     }
-
-    const dropArea = document.getElementById('dropArea');
-    const encarteFileInput = document.getElementById('encarteFileInput');
-    const encartePreviewImg = document.getElementById('encartePreviewImg');
-    const jornalImagemUrl = document.getElementById('jornalImagemUrl');
-    const btnUploadTrigger = document.getElementById('btnUploadTrigger');
-
-    if (btnUploadTrigger) {
-      btnUploadTrigger.addEventListener('click', (e) => {
-        e.stopPropagation();
-        encarteFileInput.click();
-      });
-    }
-
-    dropArea.addEventListener('click', () => encarteFileInput.click());
-
-    encarteFileInput.addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-          const base64 = evt.target.result;
-          encartePreviewImg.src = base64;
-          jornalImagemUrl.value = base64;
-          showToast('Nova imagem carregada com sucesso!', 'success');
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-
-    jornalImagemUrl.addEventListener('input', (e) => {
-      if (e.target.value) {
-        encartePreviewImg.src = e.target.value;
-      }
-    });
 
     const toast = document.getElementById('statusToast');
     function showToast(msg, type = 'success') {
