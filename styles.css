@@ -240,10 +240,10 @@ svg {
 }
 
 .header-inner {
-  display: grid;
-  grid-template-columns: minmax(12rem, 1fr) auto minmax(12rem, 1fr);
+  display: flex;
   align-items: center;
-  gap: 16px;
+  justify-content: space-between;
+  gap: 24px;
 }
 
 .logo {
@@ -281,179 +281,87 @@ svg {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  justify-content: center;
 }
 
 .logo-title {
   font-family: var(--font-heading);
   font-weight: 900;
-  font-size: 1.2rem;
+  font-size: 1.55rem;
   color: var(--color-text);
-  letter-spacing: -0.02em;
+  letter-spacing: 0.05em;
   white-space: nowrap;
-  line-height: 1.1;
+  line-height: 0.95;
 }
 
 .logo-subtitle {
-  font-size: 0.68rem;
+  font-family: var(--font-heading);
+  font-size: 0.58rem;
   font-weight: 800;
   color: var(--color-primary);
   text-transform: uppercase;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+  line-height: 1.2;
+  margin-top: 2px;
 }
 
-.villa-menu-nav {
-  position: relative;
-  z-index: 2;
-  order: 1;
-  justify-self: start;
-}
-
-/* Menu inspirado na referência, com as cores e o contraste do Villa. */
-.villa-menu-nav .main {
-  width: 12rem;
-  min-height: 2.75rem;
-  padding: 3px 15px;
-  border-radius: var(--radius-md);
-  background: var(--color-primary);
-  color: #ffffff;
-  box-shadow: 0 8px 18px rgba(21, 128, 61, 0.18);
+/* Navegação Principal Normal no Desktop */
+.nav {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  position: relative;
-  cursor: pointer;
-  font-size: 0.92rem;
-  font-weight: 800;
-  transition: background-color 0.2s ease, box-shadow 0.25s ease, transform 0.25s var(--ease-spring);
 }
 
-.villa-menu-nav .main:hover {
-  background: var(--color-primary-hover);
-  box-shadow: 0 11px 22px rgba(21, 128, 61, 0.24);
-  transform: translateY(-1px);
-}
-
-.villa-menu-nav .inp {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.villa-menu-nav .bar {
+.nav-links {
   display: flex;
-  width: 20px;
-  height: 16px;
-  flex-direction: column;
-  justify-content: center;
-  gap: 4px;
+  align-items: center;
+  gap: 26px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-.villa-menu-nav .bar-list {
-  display: block;
-  width: 100%;
-  height: 2.5px;
-  border-radius: 50px;
-  background-color: #ffffff;
-  transition: transform 0.3s ease, opacity 0.2s ease;
+.nav-link {
+  font-size: 0.94rem;
+  font-weight: 700;
+  color: var(--color-text);
+  padding: 8px 2px;
+  position: relative;
+  transition: color 0.2s ease, transform 0.2s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
 }
 
-.villa-menu-nav .inp:checked ~ .bar .top {
-  transform: translateY(6.5px) rotate(-45deg);
-}
-
-.villa-menu-nav .inp:checked ~ .bar .middle {
-  opacity: 0;
-}
-
-.villa-menu-nav .inp:checked ~ .bar .bottom {
-  transform: translateY(-6.5px) rotate(45deg);
-}
-
-.villa-menu-nav .menu-container {
-  position: absolute;
-  z-index: 5;
-  top: calc(100% + 10px);
-  left: 0;
-  width: 100%;
-  overflow: hidden;
-  border: 1px solid var(--color-primary-border);
-  border-radius: var(--radius-md);
-  background: var(--color-bg-surface);
-  box-shadow: var(--shadow-lg);
-  clip-path: inset(10% 50% 90% 50% round var(--radius-md));
-  pointer-events: none;
-  transition: clip-path 0.35s var(--ease-out-expo);
-}
-
-.villa-menu-nav .inp:checked ~ .menu-container {
-  clip-path: inset(0 0 0 0 round var(--radius-md));
-  pointer-events: auto;
-}
-
-.villa-menu-nav .menu-list {
-  --menu-delay: 0ms;
-  display: block;
-  padding: 10px 14px;
-  color: var(--color-text-muted);
-  font-size: 0.88rem;
-  font-weight: 750;
-  line-height: 1.35;
-  opacity: 0;
-  transform: translateY(16px);
-  border-bottom: 1px solid var(--color-border);
-  transition: transform 0.28s var(--ease-out-expo), opacity 0.2s ease, color 0.18s ease, background-color 0.18s ease;
-}
-
-.villa-menu-nav .menu-list:last-child {
-  border-bottom: 0;
-}
-
-.villa-menu-nav .inp:checked ~ .menu-container .menu-list {
-  opacity: 1;
-  transform: translateY(0);
-  transition-delay: var(--menu-delay);
-}
-
-.villa-menu-nav .menu-list:nth-child(2) { --menu-delay: 55ms; }
-.villa-menu-nav .menu-list:nth-child(3) { --menu-delay: 110ms; }
-.villa-menu-nav .menu-list:nth-child(4) { --menu-delay: 165ms; }
-.villa-menu-nav .menu-list:nth-child(5) { --menu-delay: 220ms; }
-.villa-menu-nav .menu-list:nth-child(6) { --menu-delay: 275ms; }
-
-.villa-menu-nav .menu-list:hover,
-.villa-menu-nav .menu-list:focus-visible {
+.nav-link:hover,
+.nav-link:focus-visible {
   color: var(--color-primary);
-  background-color: var(--color-primary-light);
   outline: none;
 }
 
-.villa-menu-nav .menu-list.active,
-.villa-menu-nav .menu-list.is-current {
-  color: var(--color-primary);
-  background-color: var(--color-primary-light);
-}
-
-.villa-menu-nav .inp:focus-visible ~ .bar {
-  outline: 3px solid var(--color-accent-light);
-  outline-offset: 5px;
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2.5px;
   border-radius: 2px;
+  background-color: var(--color-primary);
+  transition: width 0.3s var(--ease-out-expo);
 }
 
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-shrink: 0;
-  order: 3;
-  justify-self: end;
+.nav-link:hover::after,
+.nav-link.active::after,
+.nav-link.is-current::after {
+  width: 100%;
 }
 
-.header-inner > .logo {
-  order: 2;
-  justify-self: center;
+.nav-link.active,
+.nav-link.is-current {
+  color: var(--color-primary);
+  font-weight: 800;
 }
 
 /* Motion.dev Style Spring Buttons */
@@ -2100,24 +2008,54 @@ svg {
   }
 }
 
-@media (max-width: 680px) {
-  .header-inner {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
+@media (max-width: 992px) {
+  .mobile-toggle {
+    display: inline-flex;
   }
 
-  .villa-menu-nav .main {
-    width: 10rem;
-  }
-
-  .villa-menu-nav .menu-container {
-    right: 0;
-    left: auto;
-  }
-
-  .header-actions {
+  .nav-links {
     display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    flex-direction: column;
+    align-items: stretch;
+    padding: 16px 24px;
+    border-bottom: 2px solid var(--color-primary);
+    box-shadow: var(--shadow-lg);
+    gap: 4px;
+    z-index: 100;
+  }
+
+  .nav-links.active {
+    display: flex;
+    animation: menuSlideDown 0.25s var(--ease-out-expo);
+  }
+
+  .nav-link {
+    width: 100%;
+    padding: 12px 0;
+    font-size: 1rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .nav-link:last-child {
+    border-bottom: none;
+  }
+}
+
+@keyframes menuSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -3252,11 +3190,12 @@ svg {
   }
 
   .logo-title {
-    font-size: 1.05rem;
+    font-size: 1.35rem;
   }
 
   .logo-subtitle {
-    font-size: 0.6rem;
+    font-size: 0.52rem;
+    letter-spacing: 0.12em;
   }
 
   .stats-grid {
@@ -3586,16 +3525,6 @@ svg {
     transition: none;
   }
 
-  .villa-menu-nav .main,
-  .villa-menu-nav .bar-list,
-  .villa-menu-nav .menu-container,
-  .villa-menu-nav .menu-list {
-    transition: none;
-  }
-
-  .villa-menu-nav .menu-list {
-    transform: none;
-  }
 
   .js-motion .page-hero .breadcrumbs,
   .js-motion .page-hero .page-title,
@@ -3629,18 +3558,14 @@ svg {
   }
 
   .logo-title {
-    font-size: 0.88rem;
+    font-size: 1.15rem;
   }
 
   .logo-subtitle {
-    display: none;
+    font-size: 0.46rem;
+    letter-spacing: 0.11em;
   }
 
-  .villa-menu-nav .main {
-    width: 7.25rem;
-    padding-right: 11px;
-    padding-left: 11px;
-  }
 }
 
 @media (max-width: 640px) {

@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /admin.html
+Disallow: /site-data.js
+Allow: /
+
+Sitemap: https://supermercadovilla.com.br/sitemap.xml

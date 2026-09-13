@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Administrativo | Supermercado Villa</title>
+  
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <link rel="icon" type="image/svg+xml" href="images/Supermercado Villa.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="site-data.js"></script>
+
+  <style>
+    body {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .admin-nav {
+      background: #064e3b;
+      color: #ffffff;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .admin-nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      font-size: 1.15rem;
+    }
+    .admin-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .admin-nav-link {
+      color: #cbd5e1;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    .admin-nav-link:hover {
+      color: #ffffff;
+    }
+    .admin-logout-btn {
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff !important;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      min-height: auto;
+    }
+    .admin-logout-btn:hover {
+      background: rgba(239, 68, 68, 0.85);
+      border-color: #ef4444;
+      color: #ffffff !important;
+      transform: translateY(-1px);
+    }
+    .admin-container {
+      max-width: 1000px;
+      margin: 32px auto;
+      padding: 0 20px;
+      width: 100%;
+      flex: 1;
+    }
+    .admin-card {
+      background: #ffffff;
+      border-radius: 16px;
+      border: 1px solid #e2e8f0;
+      padding: 32px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    }
+    .admin-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .admin-card-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #064e3b;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .admin-form-group {
+      margin-bottom: 20px;
+    }
+    .admin-label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: #334155;
+    }
+    .admin-input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 10px;
+      font-size: 0.92rem;
+      font-family: inherit;
+      background: #f8fafc;
+      transition: all 0.2s;
+    }
+    .admin-input:focus {
+      outline: none;
+      border-color: #16a34a;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(22,163,74,0.15);
+    }
+    .admin-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 768px) {
+      .admin-grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+    .image-preview-area {
+      border: 2px dashed #cbd5e1;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      background: #f8fafc;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s;
+    }
+    .image-preview-area:hover {
+      border-color: #16a34a;
+      background: #f0fdf4;
+    }
+    .image-preview-img {
+      max-height: 280px;
+      max-width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      display: block;
+      margin: 12px auto 0;
+    }
+    .action-bar {
+      position: sticky;
+      bottom: 16px;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 16px;
+      padding: 16px 24px;
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      z-index: 99;
+    }
+    .badge-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.82rem;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-weight: 700;
+    }
+    .badge-success { background: #dcfce7; color: #15803d; }
+    .badge-info { background: #e0f2fe; color: #0284c7; }
+    .auth-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15,23,42,0.85);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+    .auth-box {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 420px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Modal de Autenticação Supabase (E-mail e Senha) -->
+  <div class="auth-overlay" id="authOverlay" style="display: flex;">
+    <div class="auth-box">
+      <div style="width: 64px; height: 64px; margin: 0 auto 16px; background: #dcfce7; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      </div>
+      <h3 style="font-size: 1.4rem; font-weight: 900; margin-bottom: 8px; color: #064e3b;">Acesso Administrativo</h3>
+      <p style="font-size: 0.88rem; color: #64748b; margin-bottom: 24px;">Entre com seu e-mail e senha de administrador cadastrados no Supabase.</p>
+      
+      <form id="authForm">
+        <div style="margin-bottom: 14px; text-align: left;">
+          <label style="display: block; font-size: 0.82rem; font-weight: 700; color: #475569; margin-bottom: 5px;">E-mail do Administrador</label>
+          <input type="email" id="authEmail" placeholder="seuemail@exemplo.com" class="admin-input" required autofocus>
+        </div>
+        <div style="margin-bottom: 20px; text-align: left;">
+          <label style="display: block; font-size: 0.82rem; font-weight: 700; color: #475569; margin-bottom: 5px;">Senha</label>
+          <input type="password" id="authPassword" placeholder="••••••••" class="admin-input" required>
+        </div>
+        <button type="submit" id="btnSubmitAuth" class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 0.95rem; font-weight: 800;">
+          Entrar no Painel
+        </button>
+        <p id="authError" style="color: #ef4444; font-size: 0.84rem; margin-top: 14px; display: none; font-weight: 700; line-height: 1.4;"></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Barra de Navegação Admin -->
+  <header class="admin-nav">
+    <div class="admin-nav-brand">
+      <div style="background: #ffffff; padding: 4px 8px; border-radius: 8px; display: flex; align-items: center;">
+        <img src="images/Supermercado Villa.svg" alt="Logo Villa" style="height: 24px; width: auto;">
+      </div>
+      <span>PAINEL ADMINISTRATIVO VILLA</span>
+    </div>
+    <div class="admin-nav-links">
+      <span id="userLoggedEmail" style="font-size: 0.85rem; color: #a7f3d0; font-weight: 600; display: none;"></span>
+      <a href="index.html" target="_blank" class="admin-nav-link" style="display: flex; align-items: center; gap: 6px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        <span>Ver Site Aberto</span>
+      </a>
+      <button id="logoutBtn" class="admin-logout-btn" type="button" title="Sair do painel">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        <span>Sair</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Container Principal -->
+  <main class="admin-container">
+    <div class="admin-header-title">
+      <h1>Painel de Controle do Site</h1>
+      <p>Gerencie facilmente o Jornal de Ofertas da semana, contatos das duas lojas e links sociais.</p>
+    </div>
+
+    <!-- SEÇÃO 1: JORNAL DE OFERTAS / ENCARTE -->
+    <div class="admin-card">
+      <div class="admin-card-header">
+        <h2 class="admin-card-title">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/></svg>
+          Jornal de Ofertas da Semana (Encarte Digital)
+        </h2>
+        <span class="badge-status badge-success" id="badgeOfertas">Vigente no Site</span>
+      </div>
+
+      <div class="admin-form-group">
+        <label class="admin-label">Título da Seção de Ofertas</label>
+        <input type="text" id="jornalTitulo" class="admin-input" placeholder="Ex: Jornal de Ofertas da Semana">
+      </div>
+
+      <div class="admin-grid-2">
+        <div class="admin-form-group">
+          <label class="admin-label">Status / Badge de Validade</label>
+          <input type="text" id="jornalStatusBadge" class="admin-input" placeholder="Ex: OFERTAS VÁLIDAS DA SEMANA • LOJAS 1 E 2">
+        </div>
+        <div class="admin-form-group">
+          <label class="admin-label">Aviso de Validade / Detalhes</label>
+          <input type="text" id="jornalValidade" class="admin-input" placeholder="Ex: Válido até domingo ou enquanto durarem os estoques">
+        </div>
+      </div>
+
+      <div class="admin-form-group">
+        <label class="admin-label">Imagem do Jornal de Ofertas</label>
+        
+        <!-- Botão de Upload com visual moderno e destacado -->
+        <div style="margin-bottom: 14px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+          <input type="file" id="encarteFileInput" accept="image/*" style="display: none;">
+          <button type="button" id="btnUploadTrigger" class="btn btn-primary" style="padding: 13px 26px; font-size: 1rem; display: inline-flex; align-items: center; gap: 10px; cursor: pointer; box-shadow: 0 4px 14px rgba(22,163,74,0.35);">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <span>Fazer Upload do Jornal de Ofertas</span>
+          </button>
+          <span style="font-size: 0.85rem; color: #64748b;">(Formatos recomendados: JPG, PNG ou WEBP)</span>
+        </div>
+
+        <div class="image-preview-area" id="dropArea" title="Clique para trocar imagem ou use o botão acima">
+          <img id="encartePreviewImg" class="image-preview-img" src="images/tabloide-oficial.jpg" alt="Prévia do Jornal de Ofertas">
+        </div>
+      </div>
+
+      <div class="admin-form-group">
+        <label class="admin-label">Ou informe o caminho/URL da imagem:</label>
+        <input type="text" id="jornalImagemUrl" class="admin-input" placeholder="Ex: images/tabloide-oficial.jpg ou URL completa">
+      </div>
+    </div>
+
+    <!-- SEÇÃO 2: LOJA 1 (MATRIZ - VILA REIS) -->
+    <div class="admin-card">
+      <div class="admin-card-header">
+        <h2 class="admin-card-title">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Loja 1 — Vila Reis (Matriz)
+        </h2>
+        <span class="badge-status badge-info">Unidade Matriz</span>
+      </div>
+
+      <div class="admin-grid-2">
+        <div class="admin-form-group">
+          <label class="admin-label">Nome de Exibição</label>
+          <input type="text" id="loja1Nome" class="admin-input">
+        </div>
+        <div class="admin-form-group">
+          <label class="admin-label">Subtítulo / Kicker</label>
+          <input type="text" id="loja1Subtitulo" class="admin-input">
+        </div>
+      </div>
+
+      <div class="admin-form-group">
+        <label class="admin-label">Endereço Completo</label>
+        <input type="text" id="loja1Endereco" class="admin-input">
+      </div>
+
+      <div class="admin-grid-2">
+        <div class="admin-form-group">
+          <label class="admin-label">Telefone Fixo</label>
+          <input type="text" id="loja1Telefone" class="admin-input" placeholder="(16) 3663-8018">
+        </div>
+        <div class="admin-form-group">
+          <label class="admin-label">WhatsApp Loja 1</label>
+          <input type="text" id="loja1Whatsapp" class="admin-input" placeholder="(16) 99140-2936">
+        </div>
+      </div>
+
+      <div class="admin-grid-2">
+        <div class="admin-form-group">
+          <label class="admin-label">Horário de Segunda a Sábado</label>
+          <input type="text" id="loja1HorarioSemana" class="admin-input" placeholder="07:00 às 20:00">
+        </div>
+        <div class="admin-form-group">
+          <label class="admin-label">Horário Domingos e Feriados</label>
+          <input type="text" id="loja1HorarioDomingo" class="admin-input" placeholder="07:00 às 13:00">
+        </div>
+      </div>
+
+      <div class="admin-grid-2">
+        <div class="admin-form-group">
+          <label class="admin-label">Link do Google Maps</label>
+          <input type="text" id="loja1Maps" class="admin-input">
+        </div>
+        <div class="admin-form-group">
+          <label class="admin-label">Link do Waze</label>
+          <input type="text" id="loja1Waze" class="admin-input">
+        </div>
+      </div>
+    </div>
+
+    <!-- SEÇÃO 3: LOJA 2 (BAIRRO AROEIRA) -->
+    <div class="admin-card">
+      <div class="admin-card-header">
+        <h2 class="admin-card-title">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Loja 2 — Bairro Aroeira
+        </h2>
+        <span class="badge-status badge-info">Unidade Aroeira</span>
+      </div>
+
+      <div class="admin-grid-2">
+        <div class="admin-form-group">
+          <label class="admin-label">Nome de Exibição</label>
+          <input type="text" id="loja2Nome" class="admin-input">
+        </div>
+        <div class="admin-form-group">
+          <label class="admin-label">Subtítulo / Kicker</label>
+          <input type="text" id="loja2Subtitulo" class="admin-input">
+        </div>
+      </div>
+
+      <div class="admin-form-group">
+        <label class="admin-label">Endereço Completo</label>
+        <input type="text" id="loja2Endereco" class="admin-input">
+      </div>
+
+      <div class="admin-grid-2">
+        <div class="admin-form-group">
+          <label class="admin-label">WhatsApp Loja 2</label>
+          <input type="text" id="loja2Whatsapp" class="admin-input" placeholder="(16) 99317-4089">
+        </div>
+        <div class="admin-form-group">
+          <label class="admin-label">Horário de Segunda a Sábado</label>
+          <input type="text" id="loja2HorarioSemana" class="admin-input" placeholder="07:00 às 20:00">
+        </div>
+      </div>
+
+      <div class="admin-grid-2">
+        <div class="admin-form-group">
+          <label class="admin-label">Horário Domingos e Feriados</label>
+          <input type="text" id="loja2HorarioDomingo" class="admin-input" placeholder="07:00 às 13:00">
+        </div>
+        <div class="admin-form-group">
+          <label class="admin-label">Link do Google Maps</label>
+          <input type="text" id="loja2Maps" class="admin-input">
+        </div>
+      </div>
+    </div>
+
+    <!-- SEÇÃO 4: REDES SOCIAIS E CANAL VIP -->
+    <div class="admin-card">
+      <div class="admin-card-header">
+        <h2 class="admin-card-title">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+          Redes Sociais & Contatos Gerais
+        </h2>
+      </div>
+
+      <div class="admin-grid-2">
+        <div class="admin-form-group">
+          <label class="admin-label">Instagram URL</label>
+          <input type="text" id="geralInstagramUrl" class="admin-input">
+        </div>
+        <div class="admin-form-group">
+          <label class="admin-label">Usuário Instagram (@)</label>
+          <input type="text" id="geralInstagramUser" class="admin-input">
+        </div>
+      </div>
+
+      <div class="admin-grid-2">
+        <div class="admin-form-group">
+          <label class="admin-label">WhatsApp Geral / VIP</label>
+          <input type="text" id="geralWhatsappVip" class="admin-input">
+        </div>
+        <div class="admin-form-group">
+          <label class="admin-label">Link do App no Google Play</label>
+          <input type="text" id="geralAppGooglePlay" class="admin-input">
+        </div>
+      </div>
+    </div>
+
+    <!-- BARRA FLUTUANTE DE AÇÕES -->
+    <div class="action-bar">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span id="statusToast" style="display: none; padding: 6px 14px; border-radius: 8px; font-weight: 700; font-size: 0.88rem;"></span>
+      </div>
+      <div style="display: flex; gap: 12px; align-items: center;">
+        <button id="btnResetDefaults" class="btn" style="background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 12px 20px;" type="button">
+          Restaurar Padrão
+        </button>
+        <button id="btnSaveLocal" class="btn btn-primary" style="padding: 12px 28px; display: inline-flex; align-items: center; gap: 8px;" type="button">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          Salvar Alterações
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    // Autenticação Real Supabase Auth (E-mail e Senha)
+    const authOverlay = document.getElementById('authOverlay');
+    const authForm = document.getElementById('authForm');
+    const authEmail = document.getElementById('authEmail');
+    const authPassword = document.getElementById('authPassword');
+    const authError = document.getElementById('authError');
+    const btnSubmitAuth = document.getElementById('btnSubmitAuth');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const userLoggedEmail = document.getElementById('userLoggedEmail');
+
+    // Recupera token de sessão do Supabase do localStorage
+    function getStoredSession() {
+      try {
+        const raw = localStorage.getItem('sb_villa_auth_session');
+        if (raw) return JSON.parse(raw);
+      } catch (e) {}
+      return null;
+    }
+
+    function checkAuth() {
+      const session = getStoredSession();
+      if (!session || !session.access_token) {
+        authOverlay.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        if (userLoggedEmail) userLoggedEmail.style.display = 'none';
+      } else {
+        authOverlay.style.display = 'none';
+        document.body.style.overflow = '';
+        if (userLoggedEmail && session.user?.email) {
+          userLoggedEmail.textContent = '👤 ' + session.user.email;
+          userLoggedEmail.style.display = 'inline-block';
+        }
+      }
+    }
+
+    // Login com Supabase Auth via REST
+    authForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      authError.style.display = 'none';
+      const email = authEmail.value.trim();
+      const password = authPassword.value;
+
+      btnSubmitAuth.disabled = true;
+      btnSubmitAuth.textContent = 'Verificando credenciais...';
+
+      try {
+        const res = await fetch(window.SUPABASE_CONFIG.url + '/auth/v1/token?grant_type=password', {
+          method: 'POST',
+          headers: {
+            'apikey': window.SUPABASE_CONFIG.anonKey,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.access_token) {
+          localStorage.setItem('sb_villa_auth_session', JSON.stringify(data));
+          authOverlay.style.display = 'none';
+          document.body.style.overflow = '';
+          if (userLoggedEmail && data.user?.email) {
+            userLoggedEmail.textContent = '👤 ' + data.user.email;
+            userLoggedEmail.style.display = 'inline-block';
+          }
+          authPassword.value = '';
+          showToast('Bem-vindo, ' + data.user.email + '!', 'success');
+        } else {
+          authError.textContent = data.error_description || data.msg || 'E-mail ou senha inválidos. Verifique os dados digitados.';
+          authError.style.display = 'block';
+          authPassword.value = '';
+          authPassword.focus();
+        }
+      } catch (err) {
+        console.error('Erro ao autenticar:', err);
+        authError.textContent = 'Falha de conexão com o Supabase. Verifique sua internet.';
+        authError.style.display = 'block';
+      } finally {
+        btnSubmitAuth.disabled = false;
+        btnSubmitAuth.textContent = 'Entrar no Painel';
+      }
+    });
+
+    // Logout
+    logoutBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const session = getStoredSession();
+      if (session && session.access_token) {
+        fetch(window.SUPABASE_CONFIG.url + '/auth/v1/logout', {
+          method: 'POST',
+          headers: {
+            'apikey': window.SUPABASE_CONFIG.anonKey,
+            'Authorization': 'Bearer ' + session.access_token
+          }
+        }).catch(() => {});
+      }
+      localStorage.removeItem('sb_villa_auth_session');
+      if (userLoggedEmail) userLoggedEmail.style.display = 'none';
+      authPassword.value = '';
+      authError.style.display = 'none';
+      authOverlay.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+      authEmail.focus();
+      showToast('Sessão encerrada com segurança.', 'success');
+    });
+
+    let currentData = window.VILLA_SITE_DATA || window.DEFAULT_VILLA_DATA;
+
+    function populateForm(data) {
+      if (!data) return;
+
+      document.getElementById('jornalTitulo').value = data.jornal?.titulo || '';
+      document.getElementById('jornalStatusBadge').value = data.jornal?.statusBadge || '';
+      document.getElementById('jornalValidade').value = data.jornal?.validade || '';
+      document.getElementById('jornalImagemUrl').value = data.jornal?.imagem || '';
+      if (data.jornal?.imagem) {
+        document.getElementById('encartePreviewImg').src = data.jornal.imagem;
+      }
+
+      document.getElementById('loja1Nome').value = data.loja1?.nome || '';
+      document.getElementById('loja1Subtitulo').value = data.loja1?.subtitulo || '';
+      document.getElementById('loja1Endereco').value = data.loja1?.endereco || '';
+      document.getElementById('loja1Telefone').value = data.loja1?.telefone || '';
+      document.getElementById('loja1Whatsapp').value = data.loja1?.whatsapp || '';
+      document.getElementById('loja1HorarioSemana').value = data.loja1?.horarioSemana || '';
+      document.getElementById('loja1HorarioDomingo').value = data.loja1?.horarioDomingo || '';
+      document.getElementById('loja1Maps').value = data.loja1?.mapsUrl || '';
+      document.getElementById('loja1Waze').value = data.loja1?.wazeUrl || '';
+
+      document.getElementById('loja2Nome').value = data.loja2?.nome || '';
+      document.getElementById('loja2Subtitulo').value = data.loja2?.subtitulo || '';
+      document.getElementById('loja2Endereco').value = data.loja2?.endereco || '';
+      document.getElementById('loja2Whatsapp').value = data.loja2?.whatsapp || '';
+      document.getElementById('loja2HorarioSemana').value = data.loja2?.horarioSemana || '';
+      document.getElementById('loja2HorarioDomingo').value = data.loja2?.horarioDomingo || '';
+      document.getElementById('loja2Maps').value = data.loja2?.mapsUrl || '';
+
+      document.getElementById('geralInstagramUrl').value = data.contatoGeral?.instagramUrl || '';
+      document.getElementById('geralInstagramUser').value = data.contatoGeral?.instagramUser || '';
+      document.getElementById('geralWhatsappVip').value = data.contatoGeral?.whatsappVip || '';
+      document.getElementById('geralAppGooglePlay').value = data.contatoGeral?.appGooglePlay || '';
+    }
+
+    function collectFormData() {
+      const cleanDigits = (str) => (str || '').replace(/\D/g, '');
+      const rawWp1 = cleanDigits(document.getElementById('loja1Whatsapp').value);
+      const rawWp2 = cleanDigits(document.getElementById('loja2Whatsapp').value);
+      const rawWpVip = cleanDigits(document.getElementById('geralWhatsappVip').value);
+
+      return {
+        jornal: {
+          titulo: document.getElementById('jornalTitulo').value.trim(),
+          statusBadge: document.getElementById('jornalStatusBadge').value.trim(),
+          imagem: document.getElementById('jornalImagemUrl').value.trim() || 'images/tabloide-oficial.jpg',
+          validade: document.getElementById('jornalValidade').value.trim(),
+          linkWhatsappTexto: 'Olá, gostaria de receber o jornal de ofertas em PDF do Supermercado Villa'
+        },
+        loja1: {
+          nome: document.getElementById('loja1Nome').value.trim(),
+          subtitulo: document.getElementById('loja1Subtitulo').value.trim(),
+          endereco: document.getElementById('loja1Endereco').value.trim(),
+          telefone: document.getElementById('loja1Telefone').value.trim(),
+          whatsapp: document.getElementById('loja1Whatsapp').value.trim(),
+          whatsappRaw: rawWp1.startsWith('55') ? rawWp1 : (rawWp1 ? '55' + rawWp1 : '5516991402936'),
+          horarioSemana: document.getElementById('loja1HorarioSemana').value.trim(),
+          horarioDomingo: document.getElementById('loja1HorarioDomingo').value.trim(),
+          mapsUrl: document.getElementById('loja1Maps').value.trim(),
+          wazeUrl: document.getElementById('loja1Waze').value.trim()
+        },
+        loja2: {
+          nome: document.getElementById('loja2Nome').value.trim(),
+          subtitulo: document.getElementById('loja2Subtitulo').value.trim(),
+          endereco: document.getElementById('loja2Endereco').value.trim(),
+          telefone: '',
+          whatsapp: document.getElementById('loja2Whatsapp').value.trim(),
+          whatsappRaw: rawWp2.startsWith('55') ? rawWp2 : (rawWp2 ? '55' + rawWp2 : '5516993174089'),
+          horarioSemana: document.getElementById('loja2HorarioSemana').value.trim(),
+          horarioDomingo: document.getElementById('loja2HorarioDomingo').value.trim(),
+          mapsUrl: document.getElementById('loja2Maps').value.trim(),
+          wazeUrl: document.getElementById('loja1Waze').value.trim()
+        },
+        contatoGeral: {
+          instagramUrl: document.getElementById('geralInstagramUrl').value.trim(),
+          instagramUser: document.getElementById('geralInstagramUser').value.trim(),
+          whatsappVip: document.getElementById('geralWhatsappVip').value.trim(),
+          whatsappVipRaw: rawWpVip.startsWith('55') ? rawWpVip : (rawWpVip ? '55' + rawWpVip : '5516991402936'),
+          appGooglePlay: document.getElementById('geralAppGooglePlay').value.trim()
+        }
+      };
+    }
+
+    const dropArea = document.getElementById('dropArea');
+    const encarteFileInput = document.getElementById('encarteFileInput');
+    const encartePreviewImg = document.getElementById('encartePreviewImg');
+    const jornalImagemUrl = document.getElementById('jornalImagemUrl');
+    const btnUploadTrigger = document.getElementById('btnUploadTrigger');
+
+    if (btnUploadTrigger) {
+      btnUploadTrigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        encarteFileInput.click();
+      });
+    }
+
+    dropArea.addEventListener('click', () => encarteFileInput.click());
+
+    encarteFileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          const base64 = evt.target.result;
+          encartePreviewImg.src = base64;
+          jornalImagemUrl.value = base64;
+          showToast('Nova imagem carregada com sucesso!', 'success');
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    jornalImagemUrl.addEventListener('input', (e) => {
+      if (e.target.value) {
+        encartePreviewImg.src = e.target.value;
+      }
+    });
+
+    const toast = document.getElementById('statusToast');
+    function showToast(msg, type = 'success') {
+      toast.textContent = msg;
+      toast.style.display = 'block';
+      if (type === 'success') {
+        toast.style.background = '#dcfce7';
+        toast.style.color = '#15803d';
+        toast.style.border = '1px solid #86efac';
+      } else {
+        toast.style.background = '#fee2e2';
+        toast.style.color = '#b91c1c';
+        toast.style.border = '1px solid #fca5a5';
+      }
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 5000);
+    }
+
+    const btnSave = document.getElementById('btnSaveLocal');
+
+    async function saveToSupabase(data) {
+      const btnOriginalHtml = btnSave.innerHTML;
+      btnSave.disabled = true;
+      btnSave.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="animation: spin 1s linear infinite;"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 10 10"/></svg> Gravando na Nuvem...';
+
+      try {
+        // Salva primeiro localmente como contingência
+        localStorage.setItem('villa_custom_site_data', JSON.stringify(data));
+
+        // Envia para o Supabase (banco em nuvem)
+        const res = await fetch(window.SUPABASE_CONFIG.url + '/rest/v1/site_config', {
+          method: 'POST',
+          headers: {
+            'apikey': window.SUPABASE_CONFIG.anonKey,
+            'Authorization': 'Bearer ' + window.SUPABASE_CONFIG.anonKey,
+            'Content-Type': 'application/json',
+            'Prefer': 'resolution=merge-duplicates'
+          },
+          body: JSON.stringify({
+            id: 'villa_main',
+            data: data,
+            updated_at: new Date().toISOString()
+          })
+        });
+
+        if (res.ok) {
+          showToast('Sucesso! Informações salvas na nuvem (Supabase) e atualizadas em todo o site.', 'success');
+        } else {
+          const errText = await res.text();
+          console.error('Supabase error:', errText);
+          showToast('Salvo apenas no navegador (erro na nuvem).', 'error');
+        }
+      } catch (err) {
+        console.error('Falha de rede ao salvar:', err);
+        showToast('Salvo apenas localmente (sem conexão com a nuvem).', 'error');
+      } finally {
+        btnSave.disabled = false;
+        btnSave.innerHTML = btnOriginalHtml;
+      }
+    }
+
+    btnSave.addEventListener('click', () => {
+      const data = collectFormData();
+      saveToSupabase(data);
+    });
+
+    document.getElementById('btnResetDefaults').addEventListener('click', async () => {
+      if (confirm('Tem certeza que deseja restaurar as informações padrão originais em todo o site?')) {
+        localStorage.removeItem('villa_custom_site_data');
+        populateForm(window.DEFAULT_VILLA_DATA);
+        await saveToSupabase(window.DEFAULT_VILLA_DATA);
+        showToast('Padrões restaurados na nuvem com sucesso!', 'success');
+      }
+    });
+
+    checkAuth();
+    populateForm(currentData);
+
+    // Se houver conexão com o Supabase, carrega os dados mais recentes da nuvem
+    if (typeof window.fetchVillaDataFromSupabase === 'function') {
+      window.fetchVillaDataFromSupabase().then(remoteData => {
+        if (remoteData) {
+          populateForm(remoteData);
+        }
+      });
+    }
+  </script>
+</body>
+</html>

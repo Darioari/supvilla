@@ -121,37 +121,38 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('resize', updateScrollState, { passive: true });
   updateScrollState();
 
-  // 0.4 Menu compacto: fecha ao navegar, clicar fora ou pressionar Esc.
+  // 0.4 Menu de navegação: suporte a toggle mobile, fechar ao clicar fora ou pressionar Esc
+  const mobileToggle = document.getElementById('mobileToggle');
   const navMenu = document.getElementById('navMenu');
-  const villaMenu = document.querySelector('.villa-menu-nav');
 
-  if (navMenu && villaMenu) {
-    const syncMenuState = () => {
-      navMenu.setAttribute('aria-expanded', String(navMenu.checked));
+  if (mobileToggle && navMenu) {
+    const toggleMenu = (open) => {
+      const shouldOpen = open !== undefined ? open : !navMenu.classList.contains('active');
+      navMenu.classList.toggle('active', shouldOpen);
+      mobileToggle.setAttribute('aria-expanded', String(shouldOpen));
     };
 
-    navMenu.addEventListener('change', syncMenuState);
-    syncMenuState();
+    mobileToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleMenu();
+    });
 
-    villaMenu.querySelectorAll('.menu-list').forEach(link => {
+    navMenu.querySelectorAll('.nav-link').forEach(link => {
       link.addEventListener('click', () => {
-        navMenu.checked = false;
-        syncMenuState();
+        toggleMenu(false);
       });
     });
 
     document.addEventListener('click', (event) => {
-      if (navMenu.checked && !villaMenu.contains(event.target)) {
-        navMenu.checked = false;
-        syncMenuState();
+      if (navMenu.classList.contains('active') && !navMenu.contains(event.target) && !mobileToggle.contains(event.target)) {
+        toggleMenu(false);
       }
     });
 
     document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && navMenu.checked) {
-        navMenu.checked = false;
-        syncMenuState();
-        navMenu.focus();
+      if (event.key === 'Escape' && navMenu.classList.contains('active')) {
+        toggleMenu(false);
+        mobileToggle.focus();
       }
     });
   }
@@ -480,4 +481,53 @@ document.addEventListener('DOMContentLoaded', () => {
     const statsGrid = document.querySelector('.stats-grid');
     if (statsGrid) statsObserver.observe(statsGrid);
   }
+
+  // 10. DYNAMIC HYDRATION (Site Data via site-data.js & Supabase)
+  function applyVillaSiteData(customData) {
+    const data = customData || window.VILLA_SITE_DATA || window.DEFAULT_VILLA_DATA;
+    if (!data) return;
+
+    // Atualizar imagens e dados do Jornal de Ofertas / Encarte
+    if (data.jornal) {
+      if (data.jornal.imagem) {
+        const tabloideImgs = document.querySelectorAll('#tabloideImg, .tabloide-frame img, .hero-slider-section [alt*="Encarte"]');
+        tabloideImgs.forEach(img => {
+          img.src = data.jornal.imagem;
+        });
+        const lightboxImg = document.getElementById('lightboxImg');
+        if (lightboxImg) lightboxImg.src = data.jornal.imagem;
+      }
+      if (data.jornal.statusBadge) {
+        const badgeEls = document.querySelectorAll('.tabloide-status span:not(.tabloide-status-dot)');
+        badgeEls.forEach(badge => {
+          badge.textContent = data.jornal.statusBadge;
+        });
+      }
+      if (data.jornal.titulo) {
+        const titleEl = document.querySelector('.page-title');
+        if (titleEl && document.title.includes('Ofertas')) {
+          titleEl.textContent = data.jornal.titulo;
+        }
+      }
+      if (data.jornal.validade) {
+        const validadeEls = document.querySelectorAll('.tabloide-validade-txt');
+        validadeEls.forEach(el => {
+          el.textContent = data.jornal.validade;
+        });
+      }
+    }
+
+    // Atualizar redes sociais e links WhatsApp
+    if (data.contatoGeral) {
+      if (data.contatoGeral.instagramUrl) {
+        document.querySelectorAll('a[href*="instagram.com"]').forEach(a => {
+          a.href = data.contatoGeral.instagramUrl;
+        });
+      }
+    }
+  }
+
+  window.applyVillaSiteData = applyVillaSiteData;
+  applyVillaSiteData();
 });
+

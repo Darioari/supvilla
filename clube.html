@@ -25,20 +25,6 @@
 </head>
 <body>
 
-  <!-- Topbar -->
-  <div class="topbar">
-    <div class="container topbar-inner">
-      <div class="topbar-info">
-        <span class="topbar-item">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          Cadastro 100% Gratuito e sem taxas mensais
-        </span>
-      </div>
-      <div class="topbar-actions">
-        <a href="ofertas.html" class="topbar-link">Ver Ofertas Ativas do Clube</a>
-      </div>
-    </div>
-  </div>
 
   <!-- Header -->
   <header class="header">
@@ -48,18 +34,25 @@
           <img src="images/Supermercado Villa.svg" alt="Supermercado Villa Logo Oficial" class="logo-img">
         </div>
         <div class="logo-text">
-          <span class="logo-title">SUPERMERCADO VILLA</span>
-          <span class="logo-subtitle">JARDINÓPOLIS - SP</span>
+          <span class="logo-title">VILLA</span>
+          <span class="logo-subtitle">SUPERMERCADO</span>
         </div>
       </a>
 
-      <nav class="villa-menu-nav" aria-label="Navegação principal">
-        <label class="main" for="navMenu"><span>Menu</span><input class="inp" id="navMenu" type="checkbox" aria-label="Abrir menu de navegação" aria-controls="menuContainer"><span class="bar" aria-hidden="true"><span class="top bar-list"></span><span class="middle bar-list"></span><span class="bottom bar-list"></span></span><span class="menu-container" id="menuContainer"><a href="index.html" class="menu-list nav-link">Início</a><a href="ofertas.html" class="menu-list nav-link">Ofertas da Semana</a><a href="clube.html" class="menu-list nav-link active">Clube Villa</a><a href="lojas.html" class="menu-list nav-link">Nossas Lojas</a><a href="sobre.html" class="menu-list nav-link">Nossa História</a><a href="contato.html" class="menu-list nav-link">Contato</a></span></label>
+      <nav class="nav" aria-label="Navegação principal">
+        <ul class="nav-links" id="navMenu">
+          <li><a href="index.html" class="nav-link">Início</a></li>
+          <li><a href="ofertas.html" class="nav-link">Ofertas da Semana</a></li>
+          <li><a href="clube.html" class="nav-link active">Clube Villa</a></li>
+          <li><a href="lojas.html" class="nav-link">Nossas Lojas</a></li>
+          <li><a href="sobre.html" class="nav-link">Nossa História</a></li>
+          <li><a href="contato.html" class="nav-link">Contato</a></li>
+        </ul>
       </nav>
 
-      <div class="header-actions">
-        <button class="btn btn-accent js-open-clube">Cadastrar Agora</button>
-      </div>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Abrir Menu" aria-expanded="false" aria-controls="navMenu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
     </div>
   </header>
 
@@ -271,6 +264,10 @@
     </div>
   </div>
 
+  <script src="site-data.js"></script>
   <script src="main.js"></script>
 </body>
 </html>
+
+
+
